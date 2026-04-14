@@ -16,8 +16,8 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
   head: () => ({
     meta: [
-      { title: "GestiComplex — Tableau de bord" },
-      { name: "description", content: "Gestion commerciale de votre complexe : sport, événementiel et location" },
+      { title: "MWAYE HOUSE — Tableau de bord" },
+      { name: "description", content: "Gestion commerciale du complexe MWAYE HOUSE : sport, événementiel et location" },
     ],
   }),
 });
