@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 
 const navItems = [
   { to: "/", label: "Tableau de bord", icon: LayoutDashboard },
@@ -38,14 +39,19 @@ export function AppSidebar() {
         collapsed ? "w-[68px]" : "w-[260px]"
       )}
     >
-      <div className="flex items-center gap-3 px-5 py-6 border-b border-sidebar-border">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground font-bold text-sm">
-          GC
-        </div>
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-sidebar-border">
+        <img
+          src={logo}
+          alt="MWAYE HOUSE"
+          className={cn(
+            "shrink-0 object-contain transition-all duration-300",
+            collapsed ? "h-9 w-9" : "h-10 w-10"
+          )}
+        />
         {!collapsed && (
           <div className="overflow-hidden">
-            <h1 className="text-sm font-semibold text-sidebar-foreground truncate">
-              GestiComplex
+            <h1 className="text-sm font-bold text-primary truncate">
+              MWAYE HOUSE
             </h1>
             <p className="text-xs text-sidebar-foreground/50 truncate">
               Gestion commerciale
@@ -54,7 +60,7 @@ export function AppSidebar() {
         )}
       </div>
 
-      <nav className="flex-1 py-4 space-y-1 px-3">
+      <nav className="flex-1 py-4 space-y-0.5 px-3">
         {navItems.map((item) => {
           const isActive =
             item.to === "/"
@@ -65,10 +71,10 @@ export function AppSidebar() {
               key={item.to}
               to={item.to as string}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200",
                 isActive
-                  ? "bg-sidebar-accent text-sidebar-primary"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  ? "bg-primary/15 text-primary font-medium border border-primary/20"
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent"
               )}
             >
               <item.icon className="h-[18px] w-[18px] shrink-0" />
@@ -80,7 +86,7 @@ export function AppSidebar() {
 
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-foreground shadow-sm"
+        className="absolute -right-3 top-20 flex h-6 w-6 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-primary shadow-md transition-colors"
       >
         {collapsed ? (
           <ChevronRight className="h-3.5 w-3.5" />
