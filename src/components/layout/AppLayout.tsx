@@ -1,12 +1,16 @@
 import { AppSidebar } from "./AppSidebar";
-import { Bell, Search, LogOut, User } from "lucide-react";
+import { Bell, Search, LogOut, User, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "@tanstack/react-router";
+import { useUserRoles } from "@/hooks/useUserRoles";
+import { canAccessRoute } from "@/config/roleAccess";
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, signOut } = useAuth();
+  const { roles, loading: rolesLoading } = useUserRoles();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -20,6 +24,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     await signOut();
     navigate({ to: "/login" });
   };
+
+  const hasAccess = rolesLoading || canAccessRoute(location.pathname, roles);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -53,7 +59,21 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </button>
           </div>
         </header>
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-6">
+          {hasAccess ? (
+            children
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-4">
+                <ShieldAlert className="h-8 w-8" />
+              </div>
+              <h2 className="text-lg font-semibold text-foreground">Accès restreint</h2>
+              <p className="text-sm text-muted-foreground mt-1 max-w-md">
+                Vous n'avez pas les droits nécessaires pour accéder à cette section. Contactez un administrateur pour obtenir les permissions requises.
+              </p>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
