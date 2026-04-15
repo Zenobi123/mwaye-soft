@@ -115,6 +115,51 @@ export type Database = {
         }
         Relationships: []
       }
+      articles_stock: {
+        Row: {
+          categorie: string
+          created_at: string
+          description: string | null
+          emplacement: string | null
+          id: string
+          nom: string
+          prix_unitaire: number
+          quantite: number
+          quantite_min: number
+          unite: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          categorie?: string
+          created_at?: string
+          description?: string | null
+          emplacement?: string | null
+          id?: string
+          nom: string
+          prix_unitaire?: number
+          quantite?: number
+          quantite_min?: number
+          unite?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          categorie?: string
+          created_at?: string
+          description?: string | null
+          emplacement?: string | null
+          id?: string
+          nom?: string
+          prix_unitaire?: number
+          quantite?: number
+          quantite_min?: number
+          unite?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           adresse: string | null
@@ -307,6 +352,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      employes: {
+        Row: {
+          created_at: string
+          date_embauche: string
+          departement: string
+          email: string | null
+          id: string
+          nom: string
+          notes: string | null
+          poste: string
+          salaire: number
+          statut: string
+          telephone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_embauche?: string
+          departement?: string
+          email?: string | null
+          id?: string
+          nom: string
+          notes?: string | null
+          poste: string
+          salaire?: number
+          statut?: string
+          telephone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_embauche?: string
+          departement?: string
+          email?: string | null
+          id?: string
+          nom?: string
+          notes?: string | null
+          poste?: string
+          salaire?: number
+          statut?: string
+          telephone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       factures: {
         Row: {
@@ -552,6 +645,91 @@ export type Database = {
             columns: ["facture_id"]
             isOneToOne: false
             referencedRelation: "factures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mouvements_stock: {
+        Row: {
+          article_id: string
+          created_at: string
+          date_mouvement: string
+          id: string
+          motif: string | null
+          quantite: number
+          type_mouvement: string
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          date_mouvement?: string
+          id?: string
+          motif?: string | null
+          quantite?: number
+          type_mouvement?: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          date_mouvement?: string
+          id?: string
+          motif?: string | null
+          quantite?: number
+          type_mouvement?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mouvements_stock_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles_stock"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      presences: {
+        Row: {
+          created_at: string
+          date_presence: string
+          employe_id: string
+          heure_arrivee: string | null
+          heure_depart: string | null
+          id: string
+          notes: string | null
+          statut: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_presence?: string
+          employe_id: string
+          heure_arrivee?: string | null
+          heure_depart?: string | null
+          id?: string
+          notes?: string | null
+          statut?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_presence?: string
+          employe_id?: string
+          heure_arrivee?: string | null
+          heure_depart?: string | null
+          id?: string
+          notes?: string | null
+          statut?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presences_employe_id_fkey"
+            columns: ["employe_id"]
+            isOneToOne: false
+            referencedRelation: "employes"
             referencedColumns: ["id"]
           },
         ]
