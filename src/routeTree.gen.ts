@@ -17,8 +17,11 @@ import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JournalCaisseRouteImport } from './routes/journal-caisse'
 import { Route as HammamRouteImport } from './routes/hammam'
+import { Route as FacturesRouteImport } from './routes/factures'
 import { Route as EvenementsRouteImport } from './routes/evenements'
+import { Route as DevisRouteImport } from './routes/devis'
 import { Route as DepensesRouteImport } from './routes/depenses'
+import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as AppartementsRouteImport } from './routes/appartements'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -62,14 +65,29 @@ const HammamRoute = HammamRouteImport.update({
   path: '/hammam',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FacturesRoute = FacturesRouteImport.update({
+  id: '/factures',
+  path: '/factures',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EvenementsRoute = EvenementsRouteImport.update({
   id: '/evenements',
   path: '/evenements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevisRoute = DevisRouteImport.update({
+  id: '/devis',
+  path: '/devis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DepensesRoute = DepensesRouteImport.update({
   id: '/depenses',
   path: '/depenses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientsRoute = ClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppartementsRoute = AppartementsRouteImport.update({
@@ -86,8 +104,11 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/appartements': typeof AppartementsRoute
+  '/clients': typeof ClientsRoute
   '/depenses': typeof DepensesRoute
+  '/devis': typeof DevisRoute
   '/evenements': typeof EvenementsRoute
+  '/factures': typeof FacturesRoute
   '/hammam': typeof HammamRoute
   '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
@@ -100,8 +121,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/appartements': typeof AppartementsRoute
+  '/clients': typeof ClientsRoute
   '/depenses': typeof DepensesRoute
+  '/devis': typeof DevisRoute
   '/evenements': typeof EvenementsRoute
+  '/factures': typeof FacturesRoute
   '/hammam': typeof HammamRoute
   '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
@@ -115,8 +139,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/appartements': typeof AppartementsRoute
+  '/clients': typeof ClientsRoute
   '/depenses': typeof DepensesRoute
+  '/devis': typeof DevisRoute
   '/evenements': typeof EvenementsRoute
+  '/factures': typeof FacturesRoute
   '/hammam': typeof HammamRoute
   '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
@@ -131,8 +158,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/appartements'
+    | '/clients'
     | '/depenses'
+    | '/devis'
     | '/evenements'
+    | '/factures'
     | '/hammam'
     | '/journal-caisse'
     | '/login'
@@ -145,8 +175,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/appartements'
+    | '/clients'
     | '/depenses'
+    | '/devis'
     | '/evenements'
+    | '/factures'
     | '/hammam'
     | '/journal-caisse'
     | '/login'
@@ -159,8 +192,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/appartements'
+    | '/clients'
     | '/depenses'
+    | '/devis'
     | '/evenements'
+    | '/factures'
     | '/hammam'
     | '/journal-caisse'
     | '/login'
@@ -174,8 +210,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppartementsRoute: typeof AppartementsRoute
+  ClientsRoute: typeof ClientsRoute
   DepensesRoute: typeof DepensesRoute
+  DevisRoute: typeof DevisRoute
   EvenementsRoute: typeof EvenementsRoute
+  FacturesRoute: typeof FacturesRoute
   HammamRoute: typeof HammamRoute
   JournalCaisseRoute: typeof JournalCaisseRoute
   LoginRoute: typeof LoginRoute
@@ -244,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HammamRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/factures': {
+      id: '/factures'
+      path: '/factures'
+      fullPath: '/factures'
+      preLoaderRoute: typeof FacturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/evenements': {
       id: '/evenements'
       path: '/evenements'
@@ -251,11 +297,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EvenementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/devis': {
+      id: '/devis'
+      path: '/devis'
+      fullPath: '/devis'
+      preLoaderRoute: typeof DevisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/depenses': {
       id: '/depenses'
       path: '/depenses'
       fullPath: '/depenses'
       preLoaderRoute: typeof DepensesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clients': {
+      id: '/clients'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof ClientsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/appartements': {
@@ -278,8 +338,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppartementsRoute: AppartementsRoute,
+  ClientsRoute: ClientsRoute,
   DepensesRoute: DepensesRoute,
+  DevisRoute: DevisRoute,
   EvenementsRoute: EvenementsRoute,
+  FacturesRoute: FacturesRoute,
   HammamRoute: HammamRoute,
   JournalCaisseRoute: JournalCaisseRoute,
   LoginRoute: LoginRoute,

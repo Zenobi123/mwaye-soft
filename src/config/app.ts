@@ -30,4 +30,12 @@ export const STATUS_COLORS: Record<string, string> = {
   fermé: "bg-destructive/10 text-destructive",
   active: "bg-success/10 text-success",
   fermée: "bg-destructive/10 text-destructive",
+  brouillon: "bg-muted text-muted-foreground",
+  envoyé: "bg-info/10 text-info",
+  envoyée: "bg-info/10 text-info",
+  accepté: "bg-success/10 text-success",
+  refusé: "bg-destructive/10 text-destructive",
+  payée: "bg-success/10 text-success",
+  "en retard": "bg-destructive/10 text-destructive",
+  annulée: "bg-destructive/10 text-destructive",
 };
