@@ -2,29 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Droplets, Users, ThermometerSun } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useHammam } from "@/hooks/useHammam";
+import { STATUS_COLORS, formatAmount } from "@/config/app";
 
 export const Route = createFileRoute("/hammam")({
   component: HammamPage,
   head: () => ({
     meta: [
-      { title: "Hammam — GestiComplex" },
+      { title: "Hammam — MWAYE HOUSE" },
       { name: "description", content: "Gestion du hammam" },
     ],
   }),
 });
 
-const sections = [
-  { name: "Hammam Hommes", status: "ouvert", visitors: 12, capacity: 25, temp: "45°C", revenue: 62000 },
-  { name: "Hammam Femmes", status: "maintenance", visitors: 0, capacity: 20, temp: "—", revenue: 0 },
-];
-
-const entries = [
-  { time: "08:30", name: "Client #1-12", section: "Hommes", type: "Entrée simple", amount: 500 },
-  { time: "09:00", name: "Client #13-18", section: "Hommes", type: "Entrée + Gommage", amount: 1000 },
-  { time: "10:15", name: "Client #19-22", section: "Hommes", type: "Forfait VIP", amount: 2000 },
-];
-
 function HammamPage() {
+  const { sections, entries } = useHammam();
+
   return (
     <AppLayout>
       <div className="space-y-6">
@@ -38,10 +31,7 @@ function HammamPage() {
             <div key={s.name} className="rounded-xl border border-border bg-card p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-base font-semibold text-card-foreground">{s.name}</h3>
-                <span className={cn(
-                  "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase",
-                  s.status === "ouvert" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
-                )}>
+                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase", STATUS_COLORS[s.status])}>
                   {s.status}
                 </span>
               </div>
@@ -94,7 +84,7 @@ function HammamPage() {
                   <td className="px-5 py-3.5 text-muted-foreground">{e.section}</td>
                   <td className="px-5 py-3.5 text-muted-foreground">{e.type}</td>
                   <td className="px-5 py-3.5 text-right font-semibold text-success tabular-nums">
-                    +{e.amount.toLocaleString("fr-FR")} DA
+                    +{formatAmount(e.amount)}
                   </td>
                 </tr>
               ))}

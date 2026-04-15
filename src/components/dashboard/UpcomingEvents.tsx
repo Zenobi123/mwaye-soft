@@ -1,12 +1,6 @@
 import { Calendar, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const events = [
-  { id: 1, title: "Mariage - Famille Benali", date: "18 Avr 2026", time: "14:00 - 23:00", hall: "Salle Diamant", status: "confirmé" },
-  { id: 2, title: "Séminaire entreprise", date: "20 Avr 2026", time: "09:00 - 17:00", hall: "Salle Émeraude", status: "confirmé" },
-  { id: 3, title: "Fête d'anniversaire", date: "22 Avr 2026", time: "18:00 - 00:00", hall: "Salle Saphir", status: "en attente" },
-  { id: 4, title: "Conférence régionale", date: "25 Avr 2026", time: "08:00 - 18:00", hall: "Salle Diamant", status: "confirmé" },
-];
+import { upcomingEvents } from "@/services/dashboardService";
 
 export function UpcomingEvents() {
   return (
@@ -17,7 +11,7 @@ export function UpcomingEvents() {
         </h3>
       </div>
       <div className="divide-y divide-border">
-        {events.map((e) => (
+        {upcomingEvents.map((e) => (
           <div key={e.id} className="px-5 py-3.5">
             <div className="flex items-start justify-between">
               <div>
