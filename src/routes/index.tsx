@@ -5,11 +5,13 @@ import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
 import { UpcomingEvents } from "@/components/dashboard/UpcomingEvents";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
 import { FacilityStatus } from "@/components/dashboard/FacilityStatus";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { formatAmount } from "@/config/app";
 import {
   ArrowDownCircle,
   ArrowUpCircle,
-  Building2,
-  Users,
+  TrendingUp,
+  Loader2,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -17,70 +19,71 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "MWAYE HOUSE — Tableau de bord" },
-      { name: "description", content: "Gestion commerciale du complexe MWAYE HOUSE : sport, événementiel et location" },
+      { name: "description", content: "Gestion commerciale du complexe MWAYE HOUSE" },
     ],
   }),
 });
 
 function Dashboard() {
+  const { recettesJour, depensesJour, recettesSemaine, recentRecettes, recentDepenses, loading } = useDashboardData();
+  const benefice = recettesJour - depensesJour;
+  const today = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
   return (
     <AppLayout>
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Tableau de bord</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Vue d'ensemble de votre complexe — 14 Avril 2026
+            Vue d'ensemble de votre complexe — {today}
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <KpiCard
-            title="Recettes du jour"
-            value="127 500 FCFA"
-            change="+12.5% vs hier"
-            changeType="positive"
-            icon={ArrowDownCircle}
-            iconBg="bg-success/10 text-success"
-          />
-          <KpiCard
-            title="Dépenses du jour"
-            value="23 200 FCFA"
-            change="-5.2% vs hier"
-            changeType="positive"
-            icon={ArrowUpCircle}
-            iconBg="bg-destructive/10 text-destructive"
-          />
-          <KpiCard
-            title="Appartements loués"
-            value="18 / 24"
-            change="75% d'occupation"
-            changeType="neutral"
-            icon={Building2}
-            iconBg="bg-info/10 text-info"
-          />
-          <KpiCard
-            title="Abonnés actifs"
-            value="342"
-            change="+28 ce mois"
-            changeType="positive"
-            icon={Users}
-            iconBg="bg-primary/10 text-primary"
-          />
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-5">
-          <div className="lg:col-span-3">
-            <RevenueChart />
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
-          <div className="lg:col-span-2">
-            <FacilityStatus />
-          </div>
-        </div>
+        ) : (
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <KpiCard
+                title="Recettes du jour"
+                value={formatAmount(recettesJour)}
+                changeType="positive"
+                icon={ArrowDownCircle}
+                iconBg="bg-success/10 text-success"
+              />
+              <KpiCard
+                title="Dépenses du jour"
+                value={formatAmount(depensesJour)}
+                changeType="neutral"
+                icon={ArrowUpCircle}
+                iconBg="bg-destructive/10 text-destructive"
+              />
+              <KpiCard
+                title="Bénéfice net du jour"
+                value={formatAmount(benefice)}
+                changeType={benefice >= 0 ? "positive" : "negative"}
+                icon={TrendingUp}
+                iconBg="bg-primary/10 text-primary"
+              />
+            </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <RecentTransactions />
-          <UpcomingEvents />
-        </div>
+            <div className="grid gap-6 lg:grid-cols-5">
+              <div className="lg:col-span-3">
+                <RevenueChart data={recettesSemaine} />
+              </div>
+              <div className="lg:col-span-2">
+                <FacilityStatus />
+              </div>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <RecentTransactions recettes={recentRecettes} depenses={recentDepenses} />
+              <UpcomingEvents />
+            </div>
+          </>
+        )}
       </div>
     </AppLayout>
   );
