@@ -8,16 +8,19 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { weeklyChartData } from "@/services/dashboardService";
 
-export function RevenueChart() {
+interface RevenueChartProps {
+  data: { name: string; recettes: number; depenses: number }[];
+}
+
+export function RevenueChart({ data }: RevenueChartProps) {
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-card-foreground mb-4">
         Recettes vs Dépenses — Cette semaine
       </h3>
       <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={weeklyChartData} barGap={4}>
+        <BarChart data={data} barGap={4}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
           <XAxis dataKey="name" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
           <YAxis tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} tickFormatter={(v) => `${v / 1000}k`} />
