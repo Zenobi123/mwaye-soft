@@ -1,43 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Calendar, MapPin, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useEvenements } from "@/hooks/useEvenements";
+import { STATUS_COLORS, formatAmount } from "@/config/app";
 
 export const Route = createFileRoute("/evenements")({
   component: EvenementsPage,
   head: () => ({
     meta: [
-      { title: "Événements — GestiComplex" },
+      { title: "Événements — MWAYE HOUSE" },
       { name: "description", content: "Gestion des événements et salles de fêtes" },
     ],
   }),
 });
 
-const halls = [
-  { name: "Salle Diamant", capacity: 500, price: "80 000 DA", status: "réservée" },
-  { name: "Salle Émeraude", capacity: 300, price: "60 000 DA", status: "disponible" },
-  { name: "Salle Saphir", capacity: 200, price: "45 000 DA", status: "disponible" },
-  { name: "Salle Rubis", capacity: 100, price: "30 000 DA", status: "maintenance" },
-];
-
-const events = [
-  { id: 1, title: "Mariage - Famille Benali", date: "18/04/2026", time: "14:00 - 23:00", hall: "Salle Diamant", guests: 450, amount: 120000, status: "confirmé" },
-  { id: 2, title: "Séminaire Tech", date: "20/04/2026", time: "09:00 - 17:00", hall: "Salle Émeraude", guests: 150, amount: 75000, status: "confirmé" },
-  { id: 3, title: "Anniversaire privé", date: "22/04/2026", time: "18:00 - 00:00", hall: "Salle Saphir", guests: 80, amount: 55000, status: "en attente" },
-  { id: 4, title: "Conférence régionale", date: "25/04/2026", time: "08:00 - 18:00", hall: "Salle Diamant", guests: 400, amount: 100000, status: "confirmé" },
-  { id: 5, title: "Gala de charité", date: "30/04/2026", time: "19:00 - 23:00", hall: "Salle Émeraude", guests: 250, amount: 90000, status: "en attente" },
-];
-
-const statusStyles: Record<string, string> = {
-  disponible: "bg-success/10 text-success",
-  réservée: "bg-warning/10 text-warning",
-  maintenance: "bg-destructive/10 text-destructive",
-  confirmé: "bg-success/10 text-success",
-  "en attente": "bg-warning/10 text-warning",
-};
-
 function EvenementsPage() {
+  const { salles, evenements } = useEvenements();
+
   return (
     <AppLayout>
       <div className="space-y-6">
@@ -52,11 +33,11 @@ function EvenementsPage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {halls.map((h) => (
+          {salles.map((h) => (
             <div key={h.name} className="rounded-xl border border-border bg-card p-5 shadow-sm">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-semibold text-card-foreground">{h.name}</h3>
-                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase", statusStyles[h.status])}>
+                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase", STATUS_COLORS[h.status])}>
                   {h.status}
                 </span>
               </div>
@@ -81,19 +62,19 @@ function EvenementsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {events.map((e) => (
+              {evenements.map((e) => (
                 <tr key={e.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-5 py-3.5 font-medium text-card-foreground">{e.title}</td>
                   <td className="px-5 py-3.5 text-muted-foreground">{e.date} · {e.time}</td>
                   <td className="px-5 py-3.5 text-muted-foreground">{e.hall}</td>
                   <td className="px-5 py-3.5 text-muted-foreground">{e.guests}</td>
                   <td className="px-5 py-3.5">
-                    <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", statusStyles[e.status])}>
+                    <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", STATUS_COLORS[e.status])}>
                       {e.status}
                     </span>
                   </td>
                   <td className="px-5 py-3.5 text-right font-semibold text-success tabular-nums">
-                    {e.amount.toLocaleString("fr-FR")} DA
+                    {formatAmount(e.amount)}
                   </td>
                 </tr>
               ))}

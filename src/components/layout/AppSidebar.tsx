@@ -1,32 +1,9 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import {
-  LayoutDashboard,
-  ArrowDownCircle,
-  ArrowUpCircle,
-  Dumbbell,
-  PartyPopper,
-  Building2,
-  BarChart3,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  Droplets,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { navItems } from "@/config/navigation";
 import logo from "@/assets/logo.png";
-
-const navItems = [
-  { to: "/", label: "Tableau de bord", icon: LayoutDashboard },
-  { to: "/recettes", label: "Recettes", icon: ArrowDownCircle },
-  { to: "/depenses", label: "Dépenses", icon: ArrowUpCircle },
-  { to: "/salles-sport", label: "Salles de sport", icon: Dumbbell },
-  { to: "/hammam", label: "Hammam", icon: Droplets },
-  { to: "/evenements", label: "Événements", icon: PartyPopper },
-  { to: "/appartements", label: "Appartements", icon: Building2 },
-  { to: "/rapports", label: "Rapports", icon: BarChart3 },
-  { to: "/parametres", label: "Paramètres", icon: Settings },
-] as const;
 
 export function AppSidebar() {
   const location = useLocation();
@@ -69,7 +46,7 @@ export function AppSidebar() {
           return (
             <Link
               key={item.to}
-              to={item.to as string}
+              to={item.to}
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-md text-[13px] transition-colors",
                 isActive

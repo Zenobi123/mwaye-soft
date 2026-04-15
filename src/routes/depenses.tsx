@@ -3,34 +3,21 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Plus, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useDepenses } from "@/hooks/useDepenses";
+import { STATUS_COLORS, formatAmount } from "@/config/app";
 
 export const Route = createFileRoute("/depenses")({
   component: DepensesPage,
   head: () => ({
     meta: [
-      { title: "Dépenses — GestiComplex" },
+      { title: "Dépenses — MWAYE HOUSE" },
       { name: "description", content: "Suivi des dépenses du complexe" },
     ],
   }),
 });
 
-const depenses = [
-  { id: 1, label: "Facture électricité", category: "Charges", amount: 12500, date: "13/04/2026", status: "payé" },
-  { id: 2, label: "Produits nettoyage", category: "Entretien", amount: 3200, date: "12/04/2026", status: "payé" },
-  { id: 3, label: "Salaires employés - Mars", category: "Personnel", amount: 180000, date: "05/04/2026", status: "payé" },
-  { id: 4, label: "Réparation climatisation", category: "Maintenance", amount: 15000, date: "03/04/2026", status: "payé" },
-  { id: 5, label: "Facture eau", category: "Charges", amount: 8500, date: "01/04/2026", status: "payé" },
-  { id: 6, label: "Équipement sport", category: "Investissement", amount: 45000, date: "28/03/2026", status: "en attente" },
-  { id: 7, label: "Publicité réseaux sociaux", category: "Marketing", amount: 5000, date: "25/03/2026", status: "payé" },
-];
-
-const statusStyles: Record<string, string> = {
-  payé: "bg-success/10 text-success",
-  "en attente": "bg-warning/10 text-warning",
-};
-
 function DepensesPage() {
-  const total = depenses.reduce((sum, d) => sum + d.amount, 0);
+  const { depenses, total } = useDepenses();
 
   return (
     <AppLayout>
@@ -39,7 +26,7 @@ function DepensesPage() {
           <div>
             <h1 className="text-2xl font-bold text-foreground">Dépenses</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Total : {total.toLocaleString("fr-FR")} DA
+              Total : {formatAmount(total)}
             </p>
           </div>
           <div className="flex gap-2">
@@ -70,12 +57,12 @@ function DepensesPage() {
                   <td className="px-5 py-3.5 text-muted-foreground">{d.category}</td>
                   <td className="px-5 py-3.5 text-muted-foreground">{d.date}</td>
                   <td className="px-5 py-3.5">
-                    <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", statusStyles[d.status])}>
+                    <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", STATUS_COLORS[d.status])}>
                       {d.status}
                     </span>
                   </td>
                   <td className="px-5 py-3.5 text-right font-semibold text-destructive tabular-nums">
-                    -{d.amount.toLocaleString("fr-FR")} DA
+                    -{formatAmount(d.amount)}
                   </td>
                 </tr>
               ))}

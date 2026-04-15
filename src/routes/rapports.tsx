@@ -6,18 +6,20 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
   PieChart, Pie, Cell,
 } from "recharts";
+import { useDashboard } from "@/hooks/useDashboard";
+import { formatAmount } from "@/config/app";
 
 export const Route = createFileRoute("/rapports")({
   component: RapportsPage,
   head: () => ({
     meta: [
-      { title: "Rapports — GestiComplex" },
+      { title: "Rapports — MWAYE HOUSE" },
       { name: "description", content: "Rapports financiers quotidiens et hebdomadaires" },
     ],
   }),
 });
 
-const weeklyData = [
+const weeklyDataForReports = [
   { name: "Sem 1", recettes: 420000, depenses: 185000 },
   { name: "Sem 2", recettes: 385000, depenses: 160000 },
   { name: "Sem 3", recettes: 510000, depenses: 210000 },
@@ -34,8 +36,8 @@ const categoryData = [
 const COLORS = ["var(--color-primary)", "var(--color-warning)", "var(--color-info)", "var(--color-accent)"];
 
 function RapportsPage() {
-  const totalRecettes = weeklyData.reduce((s, w) => s + w.recettes, 0);
-  const totalDepenses = weeklyData.reduce((s, w) => s + w.depenses, 0);
+  const totalRecettes = weeklyDataForReports.reduce((s, w) => s + w.recettes, 0);
+  const totalDepenses = weeklyDataForReports.reduce((s, w) => s + w.depenses, 0);
   const benefice = totalRecettes - totalDepenses;
 
   return (
@@ -59,15 +61,15 @@ function RapportsPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
             <p className="text-sm text-muted-foreground">Total recettes</p>
-            <p className="text-2xl font-bold text-success mt-1">{totalRecettes.toLocaleString("fr-FR")} DA</p>
+            <p className="text-2xl font-bold text-success mt-1">{formatAmount(totalRecettes)}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
             <p className="text-sm text-muted-foreground">Total dépenses</p>
-            <p className="text-2xl font-bold text-destructive mt-1">{totalDepenses.toLocaleString("fr-FR")} DA</p>
+            <p className="text-2xl font-bold text-destructive mt-1">{formatAmount(totalDepenses)}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
             <p className="text-sm text-muted-foreground">Bénéfice net</p>
-            <p className="text-2xl font-bold text-primary mt-1">{benefice.toLocaleString("fr-FR")} DA</p>
+            <p className="text-2xl font-bold text-primary mt-1">{formatAmount(benefice)}</p>
           </div>
         </div>
 
@@ -75,7 +77,7 @@ function RapportsPage() {
           <div className="lg:col-span-3 rounded-xl border border-border bg-card p-5 shadow-sm">
             <h3 className="text-sm font-semibold text-card-foreground mb-4">Recettes vs Dépenses par semaine</h3>
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={weeklyData} barGap={4}>
+              <BarChart data={weeklyDataForReports} barGap={4}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                 <XAxis dataKey="name" tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} />
                 <YAxis tick={{ fontSize: 12, fill: "var(--color-muted-foreground)" }} tickFormatter={(v) => `${v / 1000}k`} />

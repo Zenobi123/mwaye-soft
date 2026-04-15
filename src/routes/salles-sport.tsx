@@ -3,33 +3,22 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Users, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSport } from "@/hooks/useSport";
+import { STATUS_COLORS, formatAmount } from "@/config/app";
 
 export const Route = createFileRoute("/salles-sport")({
   component: SallesSportPage,
   head: () => ({
     meta: [
-      { title: "Salles de sport — GestiComplex" },
+      { title: "Salles de sport — MWAYE HOUSE" },
       { name: "description", content: "Gestion des salles de sport et abonnements" },
     ],
   }),
 });
 
-const salles = [
-  { name: "Salle Musculation", capacity: 40, current: 28, status: "active", revenue: 185000 },
-  { name: "Salle Cardio", capacity: 30, current: 14, status: "active", revenue: 120000 },
-  { name: "Salle Fitness (Femmes)", capacity: 25, current: 18, status: "active", revenue: 95000 },
-  { name: "Salle Arts Martiaux", capacity: 20, current: 0, status: "fermée", revenue: 0 },
-];
-
-const abonnes = [
-  { name: "Ahmed Khelifi", type: "Mensuel", salle: "Musculation", expiry: "30/04/2026", status: "actif" },
-  { name: "Karim Messaoudi", type: "Trimestriel", salle: "Cardio", expiry: "15/06/2026", status: "actif" },
-  { name: "Sara Larbi", type: "Mensuel", salle: "Fitness", expiry: "20/04/2026", status: "actif" },
-  { name: "Mohamed Benali", type: "Annuel", salle: "Musculation", expiry: "01/01/2027", status: "actif" },
-  { name: "Amira Hadj", type: "Mensuel", salle: "Fitness", expiry: "12/04/2026", status: "expiré" },
-];
-
 function SallesSportPage() {
+  const { salles, abonnes } = useSport();
+
   return (
     <AppLayout>
       <div className="space-y-6">
@@ -48,10 +37,7 @@ function SallesSportPage() {
             <div key={s.name} className="rounded-xl border border-border bg-card p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-card-foreground">{s.name}</h3>
-                <span className={cn(
-                  "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase",
-                  s.status === "active" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
-                )}>
+                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase", STATUS_COLORS[s.status])}>
                   {s.status}
                 </span>
               </div>
@@ -66,7 +52,7 @@ function SallesSportPage() {
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Revenu mensuel : <span className="font-semibold text-card-foreground">{s.revenue.toLocaleString("fr-FR")} DA</span>
+                Revenu mensuel : <span className="font-semibold text-card-foreground">{formatAmount(s.revenue)}</span>
               </p>
             </div>
           ))}
@@ -94,10 +80,7 @@ function SallesSportPage() {
                   <td className="px-5 py-3.5 text-muted-foreground">{a.salle}</td>
                   <td className="px-5 py-3.5 text-muted-foreground">{a.expiry}</td>
                   <td className="px-5 py-3.5">
-                    <span className={cn(
-                      "rounded-full px-2 py-0.5 text-[11px] font-semibold",
-                      a.status === "actif" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
-                    )}>
+                    <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", STATUS_COLORS[a.status])}>
                       {a.status}
                     </span>
                   </td>
