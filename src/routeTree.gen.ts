@@ -15,6 +15,7 @@ import { Route as RecettesRouteImport } from './routes/recettes'
 import { Route as RapportsRouteImport } from './routes/rapports'
 import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as JournalCaisseRouteImport } from './routes/journal-caisse'
 import { Route as HammamRouteImport } from './routes/hammam'
 import { Route as EvenementsRouteImport } from './routes/evenements'
 import { Route as DepensesRouteImport } from './routes/depenses'
@@ -51,6 +52,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalCaisseRoute = JournalCaisseRouteImport.update({
+  id: '/journal-caisse',
+  path: '/journal-caisse',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HammamRoute = HammamRouteImport.update({
   id: '/hammam',
   path: '/hammam',
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/depenses': typeof DepensesRoute
   '/evenements': typeof EvenementsRoute
   '/hammam': typeof HammamRoute
+  '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
   '/rapports': typeof RapportsRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/depenses': typeof DepensesRoute
   '/evenements': typeof EvenementsRoute
   '/hammam': typeof HammamRoute
+  '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
   '/rapports': typeof RapportsRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/depenses': typeof DepensesRoute
   '/evenements': typeof EvenementsRoute
   '/hammam': typeof HammamRoute
+  '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
   '/rapports': typeof RapportsRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/depenses'
     | '/evenements'
     | '/hammam'
+    | '/journal-caisse'
     | '/login'
     | '/parametres'
     | '/rapports'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/depenses'
     | '/evenements'
     | '/hammam'
+    | '/journal-caisse'
     | '/login'
     | '/parametres'
     | '/rapports'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/depenses'
     | '/evenements'
     | '/hammam'
+    | '/journal-caisse'
     | '/login'
     | '/parametres'
     | '/rapports'
@@ -165,6 +177,7 @@ export interface RootRouteChildren {
   DepensesRoute: typeof DepensesRoute
   EvenementsRoute: typeof EvenementsRoute
   HammamRoute: typeof HammamRoute
+  JournalCaisseRoute: typeof JournalCaisseRoute
   LoginRoute: typeof LoginRoute
   ParametresRoute: typeof ParametresRoute
   RapportsRoute: typeof RapportsRoute
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal-caisse': {
+      id: '/journal-caisse'
+      path: '/journal-caisse'
+      fullPath: '/journal-caisse'
+      preLoaderRoute: typeof JournalCaisseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hammam': {
       id: '/hammam'
       path: '/hammam'
@@ -261,6 +281,7 @@ const rootRouteChildren: RootRouteChildren = {
   DepensesRoute: DepensesRoute,
   EvenementsRoute: EvenementsRoute,
   HammamRoute: HammamRoute,
+  JournalCaisseRoute: JournalCaisseRoute,
   LoginRoute: LoginRoute,
   ParametresRoute: ParametresRoute,
   RapportsRoute: RapportsRoute,
