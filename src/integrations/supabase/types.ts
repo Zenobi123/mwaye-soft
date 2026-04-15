@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      abonnements_sport: {
+        Row: {
+          created_at: string
+          date_debut: string
+          date_fin: string
+          id: string
+          montant: number
+          nom_abonne: string
+          notes: string | null
+          salle_id: string
+          statut: string
+          telephone: string | null
+          type_abonnement: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_debut?: string
+          date_fin: string
+          id?: string
+          montant?: number
+          nom_abonne: string
+          notes?: string | null
+          salle_id: string
+          statut?: string
+          telephone?: string | null
+          type_abonnement?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_debut?: string
+          date_fin?: string
+          id?: string
+          montant?: number
+          nom_abonne?: string
+          notes?: string | null
+          salle_id?: string
+          statut?: string
+          telephone?: string | null
+          type_abonnement?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "abonnements_sport_salle_id_fkey"
+            columns: ["salle_id"]
+            isOneToOne: false
+            referencedRelation: "salles_sport"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       depenses: {
         Row: {
           categorie: string
@@ -172,6 +228,95 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      salles_sport: {
+        Row: {
+          capacite: number
+          created_at: string
+          description: string | null
+          id: string
+          nom: string
+          occupees: number
+          revenu_mensuel: number
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capacite?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom: string
+          occupees?: number
+          revenu_mensuel?: number
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capacite?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom?: string
+          occupees?: number
+          revenu_mensuel?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      seances_sport: {
+        Row: {
+          created_at: string
+          date_seance: string
+          heure_debut: string
+          heure_fin: string
+          id: string
+          notes: string | null
+          participants: number
+          salle_id: string
+          type_seance: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_seance?: string
+          heure_debut: string
+          heure_fin: string
+          id?: string
+          notes?: string | null
+          participants?: number
+          salle_id: string
+          type_seance?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_seance?: string
+          heure_debut?: string
+          heure_fin?: string
+          id?: string
+          notes?: string | null
+          participants?: number
+          salle_id?: string
+          type_seance?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seances_sport_salle_id_fkey"
+            columns: ["salle_id"]
+            isOneToOne: false
+            referencedRelation: "salles_sport"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
