@@ -14,16 +14,205 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      depenses: {
+        Row: {
+          categorie: string
+          created_at: string
+          date_depense: string
+          id: string
+          justificatif_url: string | null
+          libelle: string
+          mode_paiement: string
+          montant: number
+          notes: string | null
+          reference: string | null
+          statut: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          categorie: string
+          created_at?: string
+          date_depense?: string
+          id?: string
+          justificatif_url?: string | null
+          libelle: string
+          mode_paiement?: string
+          montant: number
+          notes?: string | null
+          reference?: string | null
+          statut?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          categorie?: string
+          created_at?: string
+          date_depense?: string
+          id?: string
+          justificatif_url?: string | null
+          libelle?: string
+          mode_paiement?: string
+          montant?: number
+          notes?: string | null
+          reference?: string | null
+          statut?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      journal_caisse: {
+        Row: {
+          created_at: string
+          date_journal: string
+          id: string
+          observations: string | null
+          solde_cloture: number
+          solde_ouverture: number
+          statut: string
+          total_depenses: number
+          total_recettes: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          date_journal: string
+          id?: string
+          observations?: string | null
+          solde_cloture?: number
+          solde_ouverture?: number
+          statut?: string
+          total_depenses?: number
+          total_recettes?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          date_journal?: string
+          id?: string
+          observations?: string | null
+          solde_cloture?: number
+          solde_ouverture?: number
+          statut?: string
+          total_depenses?: number
+          total_recettes?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      recettes: {
+        Row: {
+          categorie: string
+          created_at: string
+          date_recette: string
+          id: string
+          libelle: string
+          mode_paiement: string
+          montant: number
+          notes: string | null
+          reference: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          categorie: string
+          created_at?: string
+          date_recette?: string
+          id?: string
+          libelle: string
+          mode_paiement?: string
+          montant: number
+          notes?: string | null
+          reference?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          categorie?: string
+          created_at?: string
+          date_recette?: string
+          id?: string
+          libelle?: string
+          mode_paiement?: string
+          montant?: number
+          notes?: string | null
+          reference?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "admin"
+        | "directeur"
+        | "comptable"
+        | "resp_sport"
+        | "resp_evenement"
+        | "resp_immobilier"
+        | "caissier"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +339,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "admin",
+        "directeur",
+        "comptable",
+        "resp_sport",
+        "resp_evenement",
+        "resp_immobilier",
+        "caissier",
+      ],
+    },
   },
 } as const
