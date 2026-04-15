@@ -70,6 +70,107 @@ export type Database = {
           },
         ]
       }
+      appartements: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          locataire: string | null
+          loyer: number
+          nombre_pieces: number
+          numero: string
+          paye: boolean
+          statut: string
+          type_appartement: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          locataire?: string | null
+          loyer?: number
+          nombre_pieces?: number
+          numero: string
+          paye?: boolean
+          statut?: string
+          type_appartement?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          locataire?: string | null
+          loyer?: number
+          nombre_pieces?: number
+          numero?: string
+          paye?: boolean
+          statut?: string
+          type_appartement?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      contrats_bail: {
+        Row: {
+          appartement_id: string
+          caution: number
+          created_at: string
+          date_debut: string
+          date_fin: string
+          id: string
+          locataire: string
+          loyer_mensuel: number
+          notes: string | null
+          statut: string
+          telephone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appartement_id: string
+          caution?: number
+          created_at?: string
+          date_debut?: string
+          date_fin: string
+          id?: string
+          locataire: string
+          loyer_mensuel?: number
+          notes?: string | null
+          statut?: string
+          telephone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appartement_id?: string
+          caution?: number
+          created_at?: string
+          date_debut?: string
+          date_fin?: string
+          id?: string
+          locataire?: string
+          loyer_mensuel?: number
+          notes?: string | null
+          statut?: string
+          telephone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contrats_bail_appartement_id_fkey"
+            columns: ["appartement_id"]
+            isOneToOne: false
+            referencedRelation: "appartements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       depenses: {
         Row: {
           categorie: string
@@ -115,6 +216,98 @@ export type Database = {
           statut?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      hammam_entrees: {
+        Row: {
+          created_at: string
+          date_entree: string
+          heure: string
+          id: string
+          montant: number
+          nom_client: string
+          notes: string | null
+          section_id: string
+          type_service: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_entree?: string
+          heure: string
+          id?: string
+          montant?: number
+          nom_client: string
+          notes?: string | null
+          section_id: string
+          type_service?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_entree?: string
+          heure?: string
+          id?: string
+          montant?: number
+          nom_client?: string
+          notes?: string | null
+          section_id?: string
+          type_service?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hammam_entrees_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "hammam_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hammam_sections: {
+        Row: {
+          capacite: number
+          created_at: string
+          description: string | null
+          id: string
+          nom: string
+          revenu_mensuel: number
+          statut: string
+          temperature: string | null
+          updated_at: string
+          user_id: string
+          visiteurs: number
+        }
+        Insert: {
+          capacite?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom: string
+          revenu_mensuel?: number
+          statut?: string
+          temperature?: string | null
+          updated_at?: string
+          user_id: string
+          visiteurs?: number
+        }
+        Update: {
+          capacite?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom?: string
+          revenu_mensuel?: number
+          statut?: string
+          temperature?: string | null
+          updated_at?: string
+          user_id?: string
+          visiteurs?: number
         }
         Relationships: []
       }
@@ -226,6 +419,104 @@ export type Database = {
           reference?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      reservations_evenements: {
+        Row: {
+          contact_nom: string | null
+          contact_telephone: string | null
+          created_at: string
+          date_evenement: string
+          heure_debut: string
+          heure_fin: string
+          id: string
+          montant: number
+          nombre_invites: number
+          notes: string | null
+          salle_id: string
+          statut: string
+          titre: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_nom?: string | null
+          contact_telephone?: string | null
+          created_at?: string
+          date_evenement: string
+          heure_debut: string
+          heure_fin: string
+          id?: string
+          montant?: number
+          nombre_invites?: number
+          notes?: string | null
+          salle_id: string
+          statut?: string
+          titre: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact_nom?: string | null
+          contact_telephone?: string | null
+          created_at?: string
+          date_evenement?: string
+          heure_debut?: string
+          heure_fin?: string
+          id?: string
+          montant?: number
+          nombre_invites?: number
+          notes?: string | null
+          salle_id?: string
+          statut?: string
+          titre?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_evenements_salle_id_fkey"
+            columns: ["salle_id"]
+            isOneToOne: false
+            referencedRelation: "salles_fetes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      salles_fetes: {
+        Row: {
+          capacite: number
+          created_at: string
+          description: string | null
+          id: string
+          nom: string
+          prix_journalier: number
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capacite?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom: string
+          prix_journalier?: number
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capacite?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom?: string
+          prix_journalier?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
