@@ -28,7 +28,7 @@ export function RevenueChart() {
               borderRadius: 8,
               fontSize: 12,
             }}
-            formatter={(value) => [`${Number(value).toLocaleString("fr-FR")} DA`]}
+            formatter={(value) => [`${Number(value).toLocaleString("fr-FR")} FCFA`]}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="recettes" name="Recettes" fill="var(--color-success)" radius={[4, 4, 0, 0]} />

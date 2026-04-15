@@ -1,6 +1,6 @@
 export const APP_NAME = "MWAYE HOUSE";
 export const APP_SUBTITLE = "Gestion commerciale";
-export const CURRENCY = "DA";
+export const CURRENCY = "FCFA";
 export const LOCALE = "fr-FR";
 
 export function formatAmount(amount: number): string {

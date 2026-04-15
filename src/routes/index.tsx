@@ -36,7 +36,7 @@ function Dashboard() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <KpiCard
             title="Recettes du jour"
-            value="127 500 DA"
+            value="127 500 FCFA"
             change="+12.5% vs hier"
             changeType="positive"
             icon={ArrowDownCircle}
@@ -44,7 +44,7 @@ function Dashboard() {
           />
           <KpiCard
             title="Dépenses du jour"
-            value="23 200 DA"
+            value="23 200 FCFA"
             change="-5.2% vs hier"
             changeType="positive"
             icon={ArrowUpCircle}
