@@ -8,6 +8,7 @@ import {
   BarChart3,
   Settings,
   Droplets,
+  BookOpen,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -21,6 +22,7 @@ export const navItems: NavItem[] = [
   { to: "/", label: "Tableau de bord", icon: LayoutDashboard },
   { to: "/recettes", label: "Recettes", icon: ArrowDownCircle },
   { to: "/depenses", label: "Dépenses", icon: ArrowUpCircle },
+  { to: "/journal-caisse", label: "Journal de caisse", icon: BookOpen },
   { to: "/salles-sport", label: "Salles de sport", icon: Dumbbell },
   { to: "/hammam", label: "Hammam", icon: Droplets },
   { to: "/evenements", label: "Événements", icon: PartyPopper },

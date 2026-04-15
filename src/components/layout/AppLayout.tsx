@@ -1,7 +1,26 @@
 import { AppSidebar } from "./AppSidebar";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, LogOut, User } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate({ to: "/login" });
+    }
+  }, [user, loading, navigate]);
+
+  if (loading || !user) return null;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/login" });
+  };
+
   return (
     <div className="flex h-screen overflow-hidden">
       <AppSidebar />
@@ -25,6 +44,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
               <User className="h-4 w-4" />
             </div>
+            <button
+              onClick={handleSignOut}
+              title="Se déconnecter"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            >
+              <LogOut className="h-[18px] w-[18px]" />
+            </button>
           </div>
         </header>
         <main className="flex-1 overflow-auto p-6">{children}</main>

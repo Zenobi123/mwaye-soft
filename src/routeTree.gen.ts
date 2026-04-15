@@ -10,9 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SallesSportRouteImport } from './routes/salles-sport'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecettesRouteImport } from './routes/recettes'
 import { Route as RapportsRouteImport } from './routes/rapports'
 import { Route as ParametresRouteImport } from './routes/parametres'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as JournalCaisseRouteImport } from './routes/journal-caisse'
 import { Route as HammamRouteImport } from './routes/hammam'
 import { Route as EvenementsRouteImport } from './routes/evenements'
 import { Route as DepensesRouteImport } from './routes/depenses'
@@ -22,6 +25,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SallesSportRoute = SallesSportRouteImport.update({
   id: '/salles-sport',
   path: '/salles-sport',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecettesRoute = RecettesRouteImport.update({
@@ -37,6 +45,16 @@ const RapportsRoute = RapportsRouteImport.update({
 const ParametresRoute = ParametresRouteImport.update({
   id: '/parametres',
   path: '/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalCaisseRoute = JournalCaisseRouteImport.update({
+  id: '/journal-caisse',
+  path: '/journal-caisse',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HammamRoute = HammamRouteImport.update({
@@ -71,9 +89,12 @@ export interface FileRoutesByFullPath {
   '/depenses': typeof DepensesRoute
   '/evenements': typeof EvenementsRoute
   '/hammam': typeof HammamRoute
+  '/journal-caisse': typeof JournalCaisseRoute
+  '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
   '/rapports': typeof RapportsRoute
   '/recettes': typeof RecettesRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
 }
 export interface FileRoutesByTo {
@@ -82,9 +103,12 @@ export interface FileRoutesByTo {
   '/depenses': typeof DepensesRoute
   '/evenements': typeof EvenementsRoute
   '/hammam': typeof HammamRoute
+  '/journal-caisse': typeof JournalCaisseRoute
+  '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
   '/rapports': typeof RapportsRoute
   '/recettes': typeof RecettesRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
 }
 export interface FileRoutesById {
@@ -94,9 +118,12 @@ export interface FileRoutesById {
   '/depenses': typeof DepensesRoute
   '/evenements': typeof EvenementsRoute
   '/hammam': typeof HammamRoute
+  '/journal-caisse': typeof JournalCaisseRoute
+  '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
   '/rapports': typeof RapportsRoute
   '/recettes': typeof RecettesRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
 }
 export interface FileRouteTypes {
@@ -107,9 +134,12 @@ export interface FileRouteTypes {
     | '/depenses'
     | '/evenements'
     | '/hammam'
+    | '/journal-caisse'
+    | '/login'
     | '/parametres'
     | '/rapports'
     | '/recettes'
+    | '/reset-password'
     | '/salles-sport'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,9 +148,12 @@ export interface FileRouteTypes {
     | '/depenses'
     | '/evenements'
     | '/hammam'
+    | '/journal-caisse'
+    | '/login'
     | '/parametres'
     | '/rapports'
     | '/recettes'
+    | '/reset-password'
     | '/salles-sport'
   id:
     | '__root__'
@@ -129,9 +162,12 @@ export interface FileRouteTypes {
     | '/depenses'
     | '/evenements'
     | '/hammam'
+    | '/journal-caisse'
+    | '/login'
     | '/parametres'
     | '/rapports'
     | '/recettes'
+    | '/reset-password'
     | '/salles-sport'
   fileRoutesById: FileRoutesById
 }
@@ -141,9 +177,12 @@ export interface RootRouteChildren {
   DepensesRoute: typeof DepensesRoute
   EvenementsRoute: typeof EvenementsRoute
   HammamRoute: typeof HammamRoute
+  JournalCaisseRoute: typeof JournalCaisseRoute
+  LoginRoute: typeof LoginRoute
   ParametresRoute: typeof ParametresRoute
   RapportsRoute: typeof RapportsRoute
   RecettesRoute: typeof RecettesRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SallesSportRoute: typeof SallesSportRoute
 }
 
@@ -154,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/salles-sport'
       fullPath: '/salles-sport'
       preLoaderRoute: typeof SallesSportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recettes': {
@@ -175,6 +221,20 @@ declare module '@tanstack/react-router' {
       path: '/parametres'
       fullPath: '/parametres'
       preLoaderRoute: typeof ParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal-caisse': {
+      id: '/journal-caisse'
+      path: '/journal-caisse'
+      fullPath: '/journal-caisse'
+      preLoaderRoute: typeof JournalCaisseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hammam': {
@@ -221,9 +281,12 @@ const rootRouteChildren: RootRouteChildren = {
   DepensesRoute: DepensesRoute,
   EvenementsRoute: EvenementsRoute,
   HammamRoute: HammamRoute,
+  JournalCaisseRoute: JournalCaisseRoute,
+  LoginRoute: LoginRoute,
   ParametresRoute: ParametresRoute,
   RapportsRoute: RapportsRoute,
   RecettesRoute: RecettesRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SallesSportRoute: SallesSportRoute,
 }
 export const routeTree = rootRouteImport
