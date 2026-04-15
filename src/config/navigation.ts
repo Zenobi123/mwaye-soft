@@ -12,6 +12,8 @@ import {
   Users,
   FileText,
   Receipt,
+  Package,
+  UserCheck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -33,6 +35,8 @@ export const navItems: NavItem[] = [
   { to: "/clients", label: "Clients", icon: Users },
   { to: "/devis", label: "Devis", icon: FileText },
   { to: "/factures", label: "Factures", icon: Receipt },
+  { to: "/stocks", label: "Stocks", icon: Package },
+  { to: "/personnel", label: "Personnel", icon: UserCheck },
   { to: "/rapports", label: "Rapports", icon: BarChart3 },
   { to: "/parametres", label: "Paramètres", icon: Settings },
 ];

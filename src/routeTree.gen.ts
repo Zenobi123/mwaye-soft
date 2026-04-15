@@ -9,10 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StocksRouteImport } from './routes/stocks'
 import { Route as SallesSportRouteImport } from './routes/salles-sport'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecettesRouteImport } from './routes/recettes'
 import { Route as RapportsRouteImport } from './routes/rapports'
+import { Route as PersonnelRouteImport } from './routes/personnel'
 import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JournalCaisseRouteImport } from './routes/journal-caisse'
@@ -25,6 +27,11 @@ import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as AppartementsRouteImport } from './routes/appartements'
 import { Route as IndexRouteImport } from './routes/index'
 
+const StocksRoute = StocksRouteImport.update({
+  id: '/stocks',
+  path: '/stocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SallesSportRoute = SallesSportRouteImport.update({
   id: '/salles-sport',
   path: '/salles-sport',
@@ -43,6 +50,11 @@ const RecettesRoute = RecettesRouteImport.update({
 const RapportsRoute = RapportsRouteImport.update({
   id: '/rapports',
   path: '/rapports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersonnelRoute = PersonnelRouteImport.update({
+  id: '/personnel',
+  path: '/personnel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ParametresRoute = ParametresRouteImport.update({
@@ -113,10 +125,12 @@ export interface FileRoutesByFullPath {
   '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
+  '/personnel': typeof PersonnelRoute
   '/rapports': typeof RapportsRoute
   '/recettes': typeof RecettesRoute
   '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
+  '/stocks': typeof StocksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -130,10 +144,12 @@ export interface FileRoutesByTo {
   '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
+  '/personnel': typeof PersonnelRoute
   '/rapports': typeof RapportsRoute
   '/recettes': typeof RecettesRoute
   '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
+  '/stocks': typeof StocksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -148,10 +164,12 @@ export interface FileRoutesById {
   '/journal-caisse': typeof JournalCaisseRoute
   '/login': typeof LoginRoute
   '/parametres': typeof ParametresRoute
+  '/personnel': typeof PersonnelRoute
   '/rapports': typeof RapportsRoute
   '/recettes': typeof RecettesRoute
   '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
+  '/stocks': typeof StocksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -167,10 +185,12 @@ export interface FileRouteTypes {
     | '/journal-caisse'
     | '/login'
     | '/parametres'
+    | '/personnel'
     | '/rapports'
     | '/recettes'
     | '/reset-password'
     | '/salles-sport'
+    | '/stocks'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,10 +204,12 @@ export interface FileRouteTypes {
     | '/journal-caisse'
     | '/login'
     | '/parametres'
+    | '/personnel'
     | '/rapports'
     | '/recettes'
     | '/reset-password'
     | '/salles-sport'
+    | '/stocks'
   id:
     | '__root__'
     | '/'
@@ -201,10 +223,12 @@ export interface FileRouteTypes {
     | '/journal-caisse'
     | '/login'
     | '/parametres'
+    | '/personnel'
     | '/rapports'
     | '/recettes'
     | '/reset-password'
     | '/salles-sport'
+    | '/stocks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -219,14 +243,23 @@ export interface RootRouteChildren {
   JournalCaisseRoute: typeof JournalCaisseRoute
   LoginRoute: typeof LoginRoute
   ParametresRoute: typeof ParametresRoute
+  PersonnelRoute: typeof PersonnelRoute
   RapportsRoute: typeof RapportsRoute
   RecettesRoute: typeof RecettesRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SallesSportRoute: typeof SallesSportRoute
+  StocksRoute: typeof StocksRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stocks': {
+      id: '/stocks'
+      path: '/stocks'
+      fullPath: '/stocks'
+      preLoaderRoute: typeof StocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/salles-sport': {
       id: '/salles-sport'
       path: '/salles-sport'
@@ -253,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/rapports'
       fullPath: '/rapports'
       preLoaderRoute: typeof RapportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personnel': {
+      id: '/personnel'
+      path: '/personnel'
+      fullPath: '/personnel'
+      preLoaderRoute: typeof PersonnelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parametres': {
@@ -347,10 +387,12 @@ const rootRouteChildren: RootRouteChildren = {
   JournalCaisseRoute: JournalCaisseRoute,
   LoginRoute: LoginRoute,
   ParametresRoute: ParametresRoute,
+  PersonnelRoute: PersonnelRoute,
   RapportsRoute: RapportsRoute,
   RecettesRoute: RecettesRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SallesSportRoute: SallesSportRoute,
+  StocksRoute: StocksRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
