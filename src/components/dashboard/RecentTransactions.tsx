@@ -40,7 +40,7 @@ export function RecentTransactions() {
               )}
             >
               {t.type === "income" ? "+" : ""}
-              {t.amount.toLocaleString("fr-FR")} DA
+              {t.amount.toLocaleString("fr-FR")} FCFA
             </span>
           </div>
         ))}
