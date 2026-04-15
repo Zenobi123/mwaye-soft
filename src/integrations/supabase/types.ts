@@ -115,6 +115,45 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          adresse: string | null
+          created_at: string
+          email: string | null
+          id: string
+          nom: string
+          notes: string | null
+          telephone: string | null
+          type_client: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          adresse?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          nom: string
+          notes?: string | null
+          telephone?: string | null
+          type_client?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          adresse?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          nom?: string
+          notes?: string | null
+          telephone?: string | null
+          type_client?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contrats_bail: {
         Row: {
           appartement_id: string
@@ -218,6 +257,116 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      devis: {
+        Row: {
+          client_id: string
+          created_at: string
+          date_devis: string
+          date_validite: string | null
+          id: string
+          montant_total: number
+          notes: string | null
+          numero: string
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          date_devis?: string
+          date_validite?: string | null
+          id?: string
+          montant_total?: number
+          notes?: string | null
+          numero: string
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          date_devis?: string
+          date_validite?: string | null
+          id?: string
+          montant_total?: number
+          notes?: string | null
+          numero?: string
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devis_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      factures: {
+        Row: {
+          client_id: string
+          created_at: string
+          date_echeance: string | null
+          date_facture: string
+          devis_id: string | null
+          id: string
+          montant_total: number
+          notes: string | null
+          numero: string
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          date_echeance?: string | null
+          date_facture?: string
+          devis_id?: string | null
+          id?: string
+          montant_total?: number
+          notes?: string | null
+          numero: string
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          date_echeance?: string | null
+          date_facture?: string
+          devis_id?: string | null
+          id?: string
+          montant_total?: number
+          notes?: string | null
+          numero?: string
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "factures_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "factures_devis_id_fkey"
+            columns: ["devis_id"]
+            isOneToOne: false
+            referencedRelation: "devis"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hammam_entrees: {
         Row: {
@@ -352,6 +501,60 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      lignes_document: {
+        Row: {
+          created_at: string
+          description: string
+          devis_id: string | null
+          facture_id: string | null
+          id: string
+          montant: number
+          ordre: number
+          prix_unitaire: number
+          quantite: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          devis_id?: string | null
+          facture_id?: string | null
+          id?: string
+          montant?: number
+          ordre?: number
+          prix_unitaire?: number
+          quantite?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          devis_id?: string | null
+          facture_id?: string | null
+          id?: string
+          montant?: number
+          ordre?: number
+          prix_unitaire?: number
+          quantite?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lignes_document_devis_id_fkey"
+            columns: ["devis_id"]
+            isOneToOne: false
+            referencedRelation: "devis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lignes_document_facture_id_fkey"
+            columns: ["facture_id"]
+            isOneToOne: false
+            referencedRelation: "factures"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {

@@ -9,6 +9,9 @@ import {
   Settings,
   Droplets,
   BookOpen,
+  Users,
+  FileText,
+  Receipt,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -27,6 +30,9 @@ export const navItems: NavItem[] = [
   { to: "/hammam", label: "Hammam", icon: Droplets },
   { to: "/evenements", label: "Événements", icon: PartyPopper },
   { to: "/appartements", label: "Appartements", icon: Building2 },
+  { to: "/clients", label: "Clients", icon: Users },
+  { to: "/devis", label: "Devis", icon: FileText },
+  { to: "/factures", label: "Factures", icon: Receipt },
   { to: "/rapports", label: "Rapports", icon: BarChart3 },
   { to: "/parametres", label: "Paramètres", icon: Settings },
 ];
