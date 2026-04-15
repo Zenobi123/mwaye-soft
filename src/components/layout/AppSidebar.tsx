@@ -3,11 +3,18 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/config/navigation";
+import { canAccessRoute } from "@/config/roleAccess";
+import { useUserRoles } from "@/hooks/useUserRoles";
 import logo from "@/assets/logo.png";
 
 export function AppSidebar() {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const { roles, loading: rolesLoading } = useUserRoles();
+
+  const visibleItems = rolesLoading
+    ? navItems
+    : navItems.filter((item) => canAccessRoute(item.to, roles));
 
   return (
     <aside
@@ -38,7 +45,7 @@ export function AppSidebar() {
       </div>
 
       <nav className="flex-1 py-3 space-y-0.5 px-2">
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const isActive =
             item.to === "/"
               ? location.pathname === "/"
