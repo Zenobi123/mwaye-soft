@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Shield, Users, Bell, Building, Plus, X, Loader2, Trash2 } from "lucide-react";
+import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { BackButton } from "@/components/layout/BackButton";
 import { InviteUserDialog } from "@/components/parametres/InviteUserDialog";
+import { SettingsForm } from "@/components/parametres/SettingsForm";
+import { AuditLogTable } from "@/components/parametres/AuditLogTable";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteUser } from "@/server/deleteUser.functions";
 import { toast } from "sonner";
@@ -83,6 +85,9 @@ function ParametresPage() {
             <TabsTrigger value="users" className="gap-2"><Users className="h-4 w-4" />Utilisateurs</TabsTrigger>
             <TabsTrigger value="roles" className="gap-2"><Shield className="h-4 w-4" />Rôles</TabsTrigger>
             <TabsTrigger value="config" className="gap-2"><Building className="h-4 w-4" />Configuration</TabsTrigger>
+            {isAdmin && (
+              <TabsTrigger value="audit" className="gap-2"><FileSearch className="h-4 w-4" />Audit</TabsTrigger>
+            )}
           </TabsList>
 
           {/* ── Utilisateurs + Attribution des rôles ── */}
@@ -233,50 +238,23 @@ function ParametresPage() {
             </div>
           </TabsContent>
 
-          {/* ── Configuration globale ── */}
+          {/* ── Configuration globale (modifiable par admin) ── */}
           <TabsContent value="config">
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                { icon: Building, title: "Informations du complexe", description: "MWAYE HOUSE — Cameroun. Devise : F CFA" },
-                { icon: Bell, title: "Notifications", description: "Alertes de paiement, rappels d'expiration, événements" },
-              ].map((s) => (
-                <div
-                  key={s.title}
-                  className="flex items-start gap-4 rounded-xl border border-border bg-card p-5 shadow-sm"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <s.icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-card-foreground">{s.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">{s.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm mt-4">
-              <h3 className="text-sm font-semibold text-card-foreground mb-3">Paramètres financiers</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between py-1 border-b border-border">
-                  <span className="text-muted-foreground">Devise</span>
-                  <span className="font-medium">F CFA</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-border">
-                  <span className="text-muted-foreground">TVA applicable</span>
-                  <span className="font-medium">19,25 %</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-border">
-                  <span className="text-muted-foreground">Pénalité retard loyer</span>
-                  <span className="font-medium">10 % / mois</span>
-                </div>
-                <div className="flex justify-between py-1">
-                  <span className="text-muted-foreground">Locale</span>
-                  <span className="font-medium">fr-FR</span>
-                </div>
-              </div>
-            </div>
+            <SettingsForm />
           </TabsContent>
+
+          {/* ── Journal d'audit (admin uniquement) ── */}
+          {isAdmin && (
+            <TabsContent value="audit">
+              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <FileSearch className="h-4 w-4 text-muted-foreground" />
+                  <h3 className="text-sm font-semibold text-card-foreground">Journal d'audit</h3>
+                </div>
+                <AuditLogTable />
+              </div>
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </AppLayout>

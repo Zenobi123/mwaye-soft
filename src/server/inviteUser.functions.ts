@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { logServerAudit } from "@/server/auditLogger";
 
 const ROLES = [
   "admin",
@@ -79,12 +80,27 @@ export const inviteUser = createServerFn({ method: "POST" })
       .insert({ user_id: userId, role: data.role });
 
     if (roleInsertErr && roleInsertErr.code !== "23505") {
+      await logServerAudit(context.supabase, context.userId, {
+        action: "user.invited",
+        entity_type: "user",
+        entity_id: userId,
+        entity_label: data.full_name,
+        details: { email: data.email, mode: data.mode, role: data.role, role_warning: roleInsertErr.message },
+      });
       return {
         ok: true as const,
         userId,
         warning: `Utilisateur créé mais l'attribution du rôle a échoué : ${roleInsertErr.message}`,
       };
     }
+
+    await logServerAudit(context.supabase, context.userId, {
+      action: "user.invited",
+      entity_type: "user",
+      entity_id: userId,
+      entity_label: data.full_name,
+      details: { email: data.email, mode: data.mode, role: data.role },
+    });
 
     return { ok: true as const, userId };
   });

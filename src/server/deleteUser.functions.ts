@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { logServerAudit } from "@/server/auditLogger";
 
 const inputSchema = z.object({
   user_id: z.string().uuid(),
@@ -60,11 +61,25 @@ export const deleteUser = createServerFn({ method: "POST" })
     // Supprimer le profil (le compte auth disparaît via la suppression ci-dessous)
     await supabaseAdmin.from("profiles").delete().eq("user_id", data.user_id);
 
+    // Récupérer le nom pour l'audit avant suppression
+    const { data: targetProfile } = await supabaseAdmin
+      .from("profiles")
+      .select("full_name")
+      .eq("user_id", data.user_id)
+      .maybeSingle();
+
     // Désactiver / supprimer le compte auth
     const { error: authErr } = await supabaseAdmin.auth.admin.deleteUser(data.user_id);
     if (authErr) {
       return { ok: false as const, error: `Échec suppression compte : ${authErr.message}` };
     }
+
+    await logServerAudit(context.supabase, context.userId, {
+      action: "user.deleted",
+      entity_type: "user",
+      entity_id: data.user_id,
+      entity_label: targetProfile?.full_name ?? null,
+    });
 
     return { ok: true as const };
   });

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+import { logAudit } from "@/services/auditService";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,6 +29,8 @@ export function useAuth() {
   const signIn = useCallback(async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    // Audit après connexion réussie (asynchrone, non bloquant)
+    void logAudit({ action: "login", entity_type: "auth", entity_label: email });
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, fullName: string) => {
@@ -43,6 +46,7 @@ export function useAuth() {
   }, []);
 
   const signOut = useCallback(async () => {
+    void logAudit({ action: "logout", entity_type: "auth" });
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   }, []);

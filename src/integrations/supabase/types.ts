@@ -70,6 +70,57 @@ export type Database = {
           },
         ]
       }
+      app_settings: {
+        Row: {
+          cnps_employee_rate: number
+          cnps_employer_rate: number
+          complex_name: string
+          created_at: string
+          currency: string
+          default_event_hall_price: number
+          default_hammam_price: number
+          default_sport_price: number
+          id: string
+          late_fee_rate: number
+          locale: string
+          notification_email: string | null
+          tva_rate: number
+          updated_at: string
+        }
+        Insert: {
+          cnps_employee_rate?: number
+          cnps_employer_rate?: number
+          complex_name?: string
+          created_at?: string
+          currency?: string
+          default_event_hall_price?: number
+          default_hammam_price?: number
+          default_sport_price?: number
+          id?: string
+          late_fee_rate?: number
+          locale?: string
+          notification_email?: string | null
+          tva_rate?: number
+          updated_at?: string
+        }
+        Update: {
+          cnps_employee_rate?: number
+          cnps_employer_rate?: number
+          complex_name?: string
+          created_at?: string
+          currency?: string
+          default_event_hall_price?: number
+          default_hammam_price?: number
+          default_sport_price?: number
+          id?: string
+          late_fee_rate?: number
+          locale?: string
+          notification_email?: string | null
+          tva_rate?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       appartements: {
         Row: {
           created_at: string
@@ -157,6 +208,45 @@ export type Database = {
           unite?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_label: string | null
+          entity_type: string
+          id: string
+          ip_address: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_label?: string | null
+          entity_type: string
+          id?: string
+          ip_address?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_label?: string | null
+          entity_type?: string
+          id?: string
+          ip_address?: string | null
         }
         Relationships: []
       }
