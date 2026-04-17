@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, LogOut, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut, X, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/config/navigation";
 import { canAccessRoute } from "@/config/roleAccess";
@@ -16,6 +16,17 @@ interface AppSidebarProps {
   onMobileClose: () => void;
 }
 
+/**
+ * Dimensions normalisées (cf. spec) :
+ *   - étendu : w-64 = 256 px
+ *   - réduit : w-20 = 80 px
+ *   - drawer mobile : w-64 = 256 px
+ *   - icônes nav : 20×20 px (h-5 w-5)
+ *   - icône action (Retour, chevron) : 16×16 px (h-4 w-4)
+ *   - transition : 300 ms ease-in-out
+ *   - z-index drawer / overlay : 50
+ *   - breakpoint bascule : md (768 px)
+ */
 export function AppSidebar({ collapsed, onToggleCollapse, mobileOpen, onMobileClose }: AppSidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -31,16 +42,16 @@ export function AppSidebar({ collapsed, onToggleCollapse, mobileOpen, onMobileCl
     navigate({ to: "/login" });
   };
 
-  // Le contenu de la sidebar est partagé entre desktop et mobile (drawer)
   const renderNav = (isMobile: boolean) => (
     <>
-      <div className="flex items-center gap-3 px-4 py-4 border-b border-sidebar-border">
+      {/* En-tête sidebar : p-4 (16 px) + bordure inférieure 1 px */}
+      <div className="flex items-center gap-3 p-4 border-b border-sidebar-border">
         <img
           src={logo}
           alt="MWAYE HOUSE"
           className={cn(
             "shrink-0 object-contain",
-            collapsed && !isMobile ? "h-9 w-9" : "h-11 w-11"
+            collapsed && !isMobile ? "h-9 w-9" : "h-10 w-10"
           )}
         />
         {(!collapsed || isMobile) && (
@@ -56,15 +67,16 @@ export function AppSidebar({ collapsed, onToggleCollapse, mobileOpen, onMobileCl
         {isMobile && (
           <button
             onClick={onMobileClose}
-            className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
             aria-label="Fermer le menu"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-3 space-y-0.5 px-2">
+      {/* Navigation : py-4 (16 px), px-2 (8 px), space-y-1 (4 px) */}
+      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-1">
         <TooltipProvider delayDuration={150}>
           {visibleItems.map((item) => {
             const isActive =
@@ -74,63 +86,69 @@ export function AppSidebar({ collapsed, onToggleCollapse, mobileOpen, onMobileCl
 
             const linkContent = (
               <Link
-                key={item.to}
                 to={item.to}
                 onClick={isMobile ? onMobileClose : undefined}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-[13px] transition-colors group",
+                  // Hauteur ~40 px : py-2.5 (10×2) + ligne icône 20 px
+                  "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors",
+                  collapsed && !isMobile && "justify-center",
                   isActive
                     ? "bg-primary/10 text-primary font-medium"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
-                <item.icon className="h-4 w-4 shrink-0" />
+                {/* Icônes de navigation : 20×20 px */}
+                <item.icon className="h-5 w-5 shrink-0" />
                 {(!collapsed || isMobile) && (
                   <>
                     <span className="truncate flex-1">{item.label}</span>
-                    {isActive && <ChevronRight className="h-3.5 w-3.5 shrink-0" />}
+                    {/* Chevron actif : 16×16 px */}
+                    {isActive && <ChevronRight className="h-4 w-4 shrink-0" />}
                   </>
                 )}
               </Link>
             );
 
-            // Tooltip uniquement en mode réduit desktop
+            // Tooltip uniquement en mode réduit desktop, décalée à 56 px (left-14)
             if (collapsed && !isMobile) {
               return (
                 <Tooltip key={item.to}>
                   <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-                  <TooltipContent side="right" className="text-xs">
+                  <TooltipContent side="right" sideOffset={8} className="text-xs">
                     {item.label}
                   </TooltipContent>
                 </Tooltip>
               );
             }
-            return linkContent;
+            return <div key={item.to}>{linkContent}</div>;
           })}
         </TooltipProvider>
       </nav>
 
-      {/* Pied : bouton de déconnexion */}
-      <div className="border-t border-sidebar-border p-2">
+      {/* Pied : p-4 (16 px) + bordure supérieure 1 px */}
+      <div className="border-t border-sidebar-border p-4">
         <TooltipProvider delayDuration={150}>
           {collapsed && !isMobile ? (
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   onClick={handleSignOut}
-                  className="flex w-full items-center justify-center gap-3 px-3 py-2 rounded-md text-[13px] text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                  className="flex w-full items-center justify-center gap-3 rounded-md py-2.5 text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                  aria-label="Se déconnecter"
                 >
-                  <LogOut className="h-4 w-4 shrink-0" />
+                  <LogOut className="h-5 w-5 shrink-0" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Se déconnecter</TooltipContent>
+              <TooltipContent side="right" sideOffset={8} className="text-xs">
+                Se déconnecter
+              </TooltipContent>
             </Tooltip>
           ) : (
             <button
               onClick={handleSignOut}
-              className="flex w-full items-center gap-3 px-3 py-2 rounded-md text-[13px] text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
             >
-              <LogOut className="h-4 w-4 shrink-0" />
+              <LogOut className="h-5 w-5 shrink-0" />
               <span>Se déconnecter</span>
             </button>
           )}
@@ -141,36 +159,61 @@ export function AppSidebar({ collapsed, onToggleCollapse, mobileOpen, onMobileCl
 
   return (
     <>
-      {/* === Desktop sidebar === */}
+      {/* === Desktop sidebar (≥768 px) === */}
       <aside
         className={cn(
-          "hidden md:flex flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300 relative",
-          collapsed ? "w-[68px]" : "w-[250px]"
+          "hidden md:flex flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border relative",
+          "transition-[width] duration-300 ease-in-out",
+          collapsed ? "w-20" : "w-64"
         )}
       >
         {renderNav(false)}
+        {/* Bouton bascule : ~36×36 px, p-2, icône 20×20 */}
         <button
           onClick={onToggleCollapse}
-          className="absolute -right-3 top-16 flex h-6 w-6 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-foreground shadow-sm z-10"
-          aria-label={collapsed ? "Étendre" : "Réduire"}
+          className="absolute -right-3 top-16 flex h-7 w-7 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-foreground shadow-sm z-10"
+          aria-label={collapsed ? "Étendre la barre latérale" : "Réduire la barre latérale"}
         >
-          {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </button>
       </aside>
 
-      {/* === Mobile drawer === */}
+      {/* === Mobile drawer (<768 px) === */}
       {mobileOpen && (
         <>
+          {/* Backdrop : noir 50 %, z-50 */}
           <div
             onClick={onMobileClose}
-            className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm animate-in fade-in"
+            className="md:hidden fixed inset-0 z-50 bg-black/50 animate-in fade-in duration-300"
             aria-hidden
           />
-          <aside className="md:hidden fixed inset-y-0 left-0 z-50 w-[260px] flex flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border animate-in slide-in-from-left">
+          <aside
+            className={cn(
+              "md:hidden fixed inset-y-0 left-0 z-50 w-64 flex flex-col",
+              "bg-sidebar text-sidebar-foreground border-r border-sidebar-border",
+              "animate-in slide-in-from-left duration-300 ease-in-out"
+            )}
+          >
             {renderNav(true)}
           </aside>
         </>
       )}
     </>
+  );
+}
+
+/**
+ * Bouton hamburger flottant pour mobile.
+ * Position absolue top-3 left-3, p-2, icône 20×20 px.
+ */
+export function MobileMenuButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="md:hidden flex h-9 w-9 items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+      aria-label="Ouvrir le menu"
+    >
+      <Menu className="h-5 w-5" />
+    </button>
   );
 }
