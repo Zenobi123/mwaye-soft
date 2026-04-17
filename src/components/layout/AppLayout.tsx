@@ -1,5 +1,5 @@
 import { AppSidebar } from "./AppSidebar";
-import { Bell, Search, User, ShieldAlert, Loader2, Menu } from "lucide-react";
+import { Bell, Search, User, ShieldAlert, Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { canAccessRoute } from "@/config/roleAccess";
@@ -7,17 +7,23 @@ import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { usePersistedState } from "@/hooks/usePersistedState";
 
+/**
+ * Layout principal (cf. spec dimensions).
+ *   - Spinner global d'init : 32×32 px (h-8 w-8), border-4, min-h-screen
+ *   - Bouton hamburger mobile : 36×36 px, p-2, icône 20×20 px
+ *   - Padding contenu : px-1 lg:px-2, py-2 md:py-3, pb-8
+ *   - Bascule sidebar/drawer au breakpoint md (768 px)
+ */
 export function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading } = useAuth();
   const { roles, loading: rolesLoading } = useUserRoles();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Persisté : préférence utilisateur de réduction du sidebar desktop
   const [collapsed, setCollapsed] = usePersistedState("sidebar:collapsed", false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Ferme automatiquement le drawer mobile quand on change de route
+  // Ferme le drawer mobile à chaque changement de route
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
@@ -28,12 +34,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [user, loading, navigate]);
 
-  // Spinner global d'initialisation
+  // Indicateur de chargement global (cf. spec)
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
+      <div className="flex min-h-screen w-full items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div
+            className="h-8 w-8 rounded-full border-4 border-muted border-t-primary animate-spin"
+            aria-label="Chargement"
+          />
           <p className="text-sm text-muted-foreground">Chargement…</p>
         </div>
       </div>
@@ -53,12 +62,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         onMobileClose={() => setMobileOpen(false)}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4 md:px-6">
+        <header className="flex h-14 items-center justify-between border-b border-border bg-card px-3 sm:px-4 md:px-6">
           <div className="flex items-center gap-3">
-            {/* Bouton hamburger mobile */}
+            {/* Hamburger mobile : 36×36, p-2, icône 20×20 */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="md:hidden flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+              className="md:hidden flex h-9 w-9 items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
               aria-label="Ouvrir le menu"
             >
               <Menu className="h-5 w-5" />
@@ -72,7 +81,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               />
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button className="relative flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors">
               <Bell className="h-[18px] w-[18px]" />
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive" />
@@ -82,7 +91,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-auto p-4 md:p-6">
+        {/* Padding contenu : px-1 sm:px-2 lg:px-2, py-2 md:py-3, pb-8 */}
+        <main className="flex-1 overflow-auto px-1 sm:px-2 py-2 md:py-3 pb-8">
           {hasAccess ? (
             children
           ) : (
