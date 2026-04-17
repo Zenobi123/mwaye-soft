@@ -9,7 +9,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useParametresData } from "@/hooks/useParametresData";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRoles } from "@/hooks/useUserRoles";
 import { BackButton } from "@/components/layout/BackButton";
+import { InviteUserDialog } from "@/components/parametres/InviteUserDialog";
 
 export const Route = createFileRoute("/parametres")({
   component: ParametresPage,
@@ -22,8 +24,9 @@ export const Route = createFileRoute("/parametres")({
 });
 
 function ParametresPage() {
-  const { users, loading, assignRole, removeRole, ALL_ROLES, ROLE_LABELS } = useParametresData();
+  const { users, loading, fetchUsers, assignRole, removeRole, ALL_ROLES, ROLE_LABELS } = useParametresData();
   const { user: currentUser } = useAuth();
+  const { isAdmin } = useUserRoles();
   const [selectedRole, setSelectedRole] = useState<Record<string, string>>({});
 
   const handleAssign = async (userId: string) => {
@@ -52,7 +55,10 @@ function ParametresPage() {
           {/* ── Utilisateurs + Attribution des rôles ── */}
           <TabsContent value="users">
             <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-              <h3 className="text-sm font-semibold text-card-foreground mb-4">Gestion des utilisateurs et rôles</h3>
+              <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
+                <h3 className="text-sm font-semibold text-card-foreground">Gestion des utilisateurs et rôles</h3>
+                {isAdmin && <InviteUserDialog onCreated={fetchUsers} />}
+              </div>
               {loading ? (
                 <div className="flex items-center justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
               ) : users.length === 0 ? (
