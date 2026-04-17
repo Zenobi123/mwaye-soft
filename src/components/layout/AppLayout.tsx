@@ -1,5 +1,5 @@
 import { AppSidebar } from "./AppSidebar";
-import { Bell, Search, User, ShieldAlert, Menu } from "lucide-react";
+import { Bell, User, ShieldAlert, Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { canAccessRoute } from "@/config/roleAccess";
@@ -72,14 +72,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             >
               <Menu className="h-5 w-5" />
             </button>
-            <div className="relative hidden sm:block">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                className="h-9 w-48 lg:w-64 rounded-md border border-input bg-background pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              />
-            </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <button className="relative flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors">
