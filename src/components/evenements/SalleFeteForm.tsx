@@ -34,7 +34,7 @@ export function SalleFeteForm({ onSubmit, isPending }: Props) {
           <div><Label>Nom</Label><Input value={nom} onChange={e => setNom(e.target.value)} placeholder="Salle Diamant" required /></div>
           <div className="grid grid-cols-2 gap-4">
             <div><Label>Capacité</Label><Input type="number" value={capacite} onChange={e => setCapacite(e.target.value)} required /></div>
-            <div><Label>Prix/jour (FCFA)</Label><Input type="number" value={prix} onChange={e => setPrix(e.target.value)} required /></div>
+            <div><Label>Prix/jour (F CFA)</Label><Input type="number" value={prix} onChange={e => setPrix(e.target.value)} required /></div>
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>Ajouter</Button>
         </form>

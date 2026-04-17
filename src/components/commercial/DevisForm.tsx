@@ -80,7 +80,7 @@ export function DevisForm({ clients, onSubmit, isPending, nextNumero }: Props) {
             </Button>
           </div>
 
-          <div className="text-right text-lg font-bold">Total : {total.toLocaleString("fr-FR")} FCFA</div>
+          <div className="text-right text-lg font-bold">Total : {total.toLocaleString("fr-FR")} F CFA</div>
           <Button type="submit" className="w-full" disabled={isPending || !clientId}>Créer le devis</Button>
         </form>
       </DialogContent>

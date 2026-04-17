@@ -46,7 +46,7 @@ export function AppartementForm({ onSubmit, isPending }: Props) {
               </Select>
             </div>
             <div><Label>Pièces</Label><Input type="number" value={pieces} onChange={e => setPieces(e.target.value)} required /></div>
-            <div><Label>Loyer (FCFA)</Label><Input type="number" value={loyer} onChange={e => setLoyer(e.target.value)} required /></div>
+            <div><Label>Loyer (F CFA)</Label><Input type="number" value={loyer} onChange={e => setLoyer(e.target.value)} required /></div>
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>Ajouter</Button>
         </form>

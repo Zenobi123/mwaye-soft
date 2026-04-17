@@ -61,8 +61,8 @@ export function ContratForm({ appartements, onSubmit, isPending }: Props) {
             <div><Label>Date fin</Label><Input type="date" value={dateFin} onChange={e => setDateFin(e.target.value)} required /></div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div><Label>Loyer mensuel (FCFA)</Label><Input type="number" value={loyer} onChange={e => setLoyer(e.target.value)} required /></div>
-            <div><Label>Caution (FCFA)</Label><Input type="number" value={caution} onChange={e => setCaution(e.target.value)} required /></div>
+            <div><Label>Loyer mensuel (F CFA)</Label><Input type="number" value={loyer} onChange={e => setLoyer(e.target.value)} required /></div>
+            <div><Label>Caution (F CFA)</Label><Input type="number" value={caution} onChange={e => setCaution(e.target.value)} required /></div>
           </div>
           <Button type="submit" className="w-full" disabled={isPending || !apptId}>Créer le contrat</Button>
         </form>

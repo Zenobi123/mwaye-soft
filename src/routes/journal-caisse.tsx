@@ -126,7 +126,7 @@ function JournalCaissePage() {
                 <Input id="date_journal" name="date_journal" type="date" required defaultValue={new Date().toISOString().split("T")[0]} />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="solde_ouverture">Solde d'ouverture (FCFA)</Label>
+                <Label htmlFor="solde_ouverture">Solde d'ouverture (F CFA)</Label>
                 <Input id="solde_ouverture" name="solde_ouverture" type="number" step="1" defaultValue="0" />
               </div>
               <Button type="submit" disabled={creating}>

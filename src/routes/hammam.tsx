@@ -77,7 +77,7 @@ function HammamPage() {
                     <Droplets className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <p className="text-lg font-bold text-card-foreground">{Number(s.revenu_mensuel).toLocaleString("fr-FR")}</p>
-                      <p className="text-[11px] text-muted-foreground">FCFA ce mois</p>
+                      <p className="text-[11px] text-muted-foreground">F CFA ce mois</p>
                     </div>
                   </div>
                 </div>
