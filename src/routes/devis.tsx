@@ -7,6 +7,7 @@ import { useDevisData } from "@/hooks/useDevisData";
 import { useClientsData } from "@/hooks/useClientsData";
 import { DevisForm } from "@/components/commercial/DevisForm";
 import { STATUS_COLORS, formatAmount } from "@/config/app";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/devis")({
   component: DevisPage,
@@ -31,6 +32,7 @@ function DevisPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Devis</h1>

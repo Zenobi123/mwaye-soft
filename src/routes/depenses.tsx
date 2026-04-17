@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect, useCallback } from "react";
 import { DepenseForm } from "@/components/comptabilite/DepenseForm";
 import { useAuth } from "@/hooks/useAuth";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/depenses")({
   component: DepensesPage,
@@ -59,6 +60,7 @@ function DepensesPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Dépenses</h1>

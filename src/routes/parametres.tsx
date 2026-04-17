@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useParametresData } from "@/hooks/useParametresData";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/parametres")({
   component: ParametresPage,
@@ -35,6 +36,7 @@ function ParametresPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div>
           <h1 className="text-2xl font-bold text-foreground">Paramètres</h1>
           <p className="text-sm text-muted-foreground mt-1">Configuration générale du système</p>

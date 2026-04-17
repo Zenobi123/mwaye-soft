@@ -7,6 +7,7 @@ import { useStocksData } from "@/hooks/useStocksData";
 import { formatAmount } from "@/config/app";
 import { ArticleForm } from "@/components/stocks/ArticleForm";
 import { MouvementForm } from "@/components/stocks/MouvementForm";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/stocks")({
   component: StocksPage,
@@ -28,6 +29,7 @@ function StocksPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Stocks</h1>

@@ -12,6 +12,7 @@ import { useRapportsData } from "@/hooks/useRapportsData";
 import { formatAmount } from "@/config/app";
 import { exportCSV, exportRapportPDF } from "@/services/rapportExportService";
 import { useState } from "react";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/rapports")({
   component: RapportsPage,
@@ -58,6 +59,7 @@ function RapportsPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Rapports</h1>

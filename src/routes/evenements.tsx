@@ -7,6 +7,7 @@ import { useEvenementsData } from "@/hooks/useEvenementsData";
 import { STATUS_COLORS, formatAmount } from "@/config/app";
 import { SalleFeteForm } from "@/components/evenements/SalleFeteForm";
 import { ReservationForm } from "@/components/evenements/ReservationForm";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/evenements")({
   component: EvenementsPage,
@@ -28,6 +29,7 @@ function EvenementsPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Événements</h1>

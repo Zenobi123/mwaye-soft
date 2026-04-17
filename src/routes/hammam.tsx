@@ -7,6 +7,7 @@ import { STATUS_COLORS, formatAmount } from "@/config/app";
 import { SectionForm } from "@/components/hammam/SectionForm";
 import { EntreeForm } from "@/components/hammam/EntreeForm";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/hammam")({
   component: HammamPage,
@@ -28,6 +29,7 @@ function HammamPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Hammam</h1>

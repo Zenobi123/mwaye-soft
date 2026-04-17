@@ -7,6 +7,7 @@ import { usePersonnelData } from "@/hooks/usePersonnelData";
 import { STATUS_COLORS, formatAmount } from "@/config/app";
 import { EmployeForm } from "@/components/personnel/EmployeForm";
 import { PresenceForm } from "@/components/personnel/PresenceForm";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/personnel")({
   component: PersonnelPage,
@@ -28,6 +29,7 @@ function PersonnelPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Personnel</h1>
