@@ -1,17 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Shield, Users, Bell, Building, Plus, X, Loader2 } from "lucide-react";
+import { Shield, Users, Bell, Building, Plus, X, Loader2, Trash2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useParametresData } from "@/hooks/useParametresData";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { BackButton } from "@/components/layout/BackButton";
 import { InviteUserDialog } from "@/components/parametres/InviteUserDialog";
+import { useServerFn } from "@tanstack/react-start";
+import { deleteUser } from "@/server/deleteUser.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/parametres")({
   component: ParametresPage,
@@ -28,12 +42,31 @@ function ParametresPage() {
   const { user: currentUser } = useAuth();
   const { isAdmin } = useUserRoles();
   const [selectedRole, setSelectedRole] = useState<Record<string, string>>({});
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const deleteUserFn = useServerFn(deleteUser);
 
   const handleAssign = async (userId: string) => {
     const role = selectedRole[userId];
     if (!role) return;
     await assignRole(userId, role as any);
     setSelectedRole((prev) => ({ ...prev, [userId]: "" }));
+  };
+
+  const handleDelete = async (userId: string, name: string) => {
+    setDeletingId(userId);
+    try {
+      const res = await deleteUserFn({ data: { user_id: userId } });
+      if (res.ok) {
+        toast.success(`${name || "Utilisateur"} supprimé`);
+        fetchUsers();
+      } else {
+        toast.error(res.error);
+      }
+    } catch (e: any) {
+      toast.error(e?.message ?? "Échec de la suppression");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
@@ -71,6 +104,7 @@ function ParametresPage() {
                       <TableHead>Téléphone</TableHead>
                       <TableHead>Rôles actuels</TableHead>
                       <TableHead>Attribuer un rôle</TableHead>
+                      {isAdmin && <TableHead className="w-[60px] text-right">Actions</TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -124,6 +158,46 @@ function ParametresPage() {
                               <span className="text-xs text-muted-foreground">Tous attribués</span>
                             )}
                           </TableCell>
+                          {isAdmin && (
+                            <TableCell className="text-right">
+                              {u.user_id !== currentUser?.id && (
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button
+                                      size="icon"
+                                      variant="ghost"
+                                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                      disabled={deletingId === u.user_id}
+                                    >
+                                      {deletingId === u.user_id ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                      ) : (
+                                        <Trash2 className="h-4 w-4" />
+                                      )}
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Supprimer cet utilisateur ?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Le compte de <span className="font-medium">{u.full_name || "cet utilisateur"}</span> sera désactivé,
+                                        tous ses rôles seront retirés et son profil supprimé. Cette action est irréversible.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                      <AlertDialogAction
+                                        onClick={() => handleDelete(u.user_id, u.full_name)}
+                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                      >
+                                        Supprimer
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              )}
+                            </TableCell>
+                          )}
                         </TableRow>
                       );
                     })}
