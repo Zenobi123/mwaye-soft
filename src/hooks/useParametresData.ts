@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Tables } from "@/integrations/supabase/types";
+import { logAudit } from "@/services/auditService";
 
 type Profile = Tables<"profiles">;
 type UserRole = Tables<"user_roles">;
@@ -68,23 +69,48 @@ export function useParametresData() {
         }
         return;
       }
+      const target = users.find((u) => u.user_id === userId);
+      void logAudit({
+        action: "user.role_assigned",
+        entity_type: "user_role",
+        entity_id: userId,
+        entity_label: target?.full_name ?? userId,
+        details: { role },
+      });
       toast.success("Rôle attribué");
       fetchUsers();
     },
-    [fetchUsers]
+    [fetchUsers, users]
   );
 
   const removeRole = useCallback(
     async (roleId: string) => {
+      // Récupérer le détail avant suppression pour l'audit
+      const { data: existing } = await supabase
+        .from("user_roles")
+        .select("user_id, role")
+        .eq("id", roleId)
+        .maybeSingle();
+
       const { error } = await supabase.from("user_roles").delete().eq("id", roleId);
       if (error) {
         toast.error("Erreur suppression rôle");
         return;
       }
+      if (existing) {
+        const target = users.find((u) => u.user_id === existing.user_id);
+        void logAudit({
+          action: "user.role_removed",
+          entity_type: "user_role",
+          entity_id: existing.user_id,
+          entity_label: target?.full_name ?? existing.user_id,
+          details: { role: existing.role },
+        });
+      }
       toast.success("Rôle retiré");
       fetchUsers();
     },
-    [fetchUsers]
+    [fetchUsers, users]
   );
 
   return { users, loading, fetchUsers, assignRole, removeRole, ALL_ROLES, ROLE_LABELS };
