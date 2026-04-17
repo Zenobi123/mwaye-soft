@@ -9,6 +9,7 @@ import { SalleForm } from "@/components/sport/SalleForm";
 import { AbonneForm } from "@/components/sport/AbonneForm";
 import { SeanceForm } from "@/components/sport/SeanceForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/salles-sport")({
   component: SallesSportPage,
@@ -30,6 +31,7 @@ function SallesSportPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Salles de sport</h1>
