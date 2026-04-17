@@ -32,7 +32,7 @@ export function exportCSV(
     })),
   ].sort((a, b) => a.date.localeCompare(b.date));
 
-  const header = "Date,Type,Catégorie,Montant (FCFA),Mode de paiement";
+  const header = "Date,Type,Catégorie,Montant (F CFA),Mode de paiement";
   const csvRows = rows.map(
     (r) => `${r.date},${r.type},${r.categorie},${r.montant},${r.mode_paiement}`,
   );

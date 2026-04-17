@@ -59,7 +59,7 @@ export function EntreeForm({ sections, onSubmit, isPending }: Props) {
                 <SelectContent>{TYPES_SERVICE.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
               </Select>
             </div>
-            <div><Label>Montant (FCFA)</Label><Input type="number" value={montant} onChange={e => setMontant(e.target.value)} required /></div>
+            <div><Label>Montant (F CFA)</Label><Input type="number" value={montant} onChange={e => setMontant(e.target.value)} required /></div>
           </div>
           <Button type="submit" className="w-full" disabled={isPending || !sectionId}>Enregistrer</Button>
         </form>

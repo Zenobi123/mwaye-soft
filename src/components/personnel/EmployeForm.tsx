@@ -48,7 +48,7 @@ export function EmployeForm({ onSubmit, isPending }: Props) {
             <div><Label>Téléphone</Label><Input value={telephone} onChange={e => setTelephone(e.target.value)} /></div>
             <div><Label>Email</Label><Input type="email" value={email} onChange={e => setEmail(e.target.value)} /></div>
           </div>
-          <div><Label>Salaire mensuel (FCFA)</Label><Input type="number" value={salaire} onChange={e => setSalaire(e.target.value)} /></div>
+          <div><Label>Salaire mensuel (F CFA)</Label><Input type="number" value={salaire} onChange={e => setSalaire(e.target.value)} /></div>
           <Button type="submit" className="w-full" disabled={isPending}>Ajouter</Button>
         </form>
       </DialogContent>

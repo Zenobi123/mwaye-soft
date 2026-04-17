@@ -1,10 +1,10 @@
 import type { Evenement, Salle } from "@/types";
 
 export const salles: Salle[] = [
-  { name: "Salle Diamant", capacity: 500, price: "80 000 FCFA", status: "réservée" },
-  { name: "Salle Émeraude", capacity: 300, price: "60 000 FCFA", status: "disponible" },
-  { name: "Salle Saphir", capacity: 200, price: "45 000 FCFA", status: "disponible" },
-  { name: "Salle Rubis", capacity: 100, price: "30 000 FCFA", status: "maintenance" },
+  { name: "Salle Diamant", capacity: 500, price: "80 000 F CFA", status: "réservée" },
+  { name: "Salle Émeraude", capacity: 300, price: "60 000 F CFA", status: "disponible" },
+  { name: "Salle Saphir", capacity: 200, price: "45 000 F CFA", status: "disponible" },
+  { name: "Salle Rubis", capacity: 100, price: "30 000 F CFA", status: "maintenance" },
 ];
 
 export const evenements: Evenement[] = [

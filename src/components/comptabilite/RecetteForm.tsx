@@ -66,7 +66,7 @@ export function RecetteForm({ onClose, onSuccess }: RecetteFormProps) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label htmlFor="montant">Montant (FCFA) *</Label>
+              <Label htmlFor="montant">Montant (F CFA) *</Label>
               <Input id="montant" name="montant" type="number" min="1" step="1" required placeholder="50000" />
             </div>
             <div className="space-y-1">

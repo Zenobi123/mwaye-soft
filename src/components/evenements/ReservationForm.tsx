@@ -65,7 +65,7 @@ export function ReservationForm({ salles, onSubmit, isPending }: Props) {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div><Label>Invités</Label><Input type="number" value={invites} onChange={e => setInvites(e.target.value)} required /></div>
-            <div><Label>Montant (FCFA)</Label><Input type="number" value={montant} onChange={e => setMontant(e.target.value)} required /></div>
+            <div><Label>Montant (F CFA)</Label><Input type="number" value={montant} onChange={e => setMontant(e.target.value)} required /></div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div><Label>Contact</Label><Input value={contactNom} onChange={e => setContactNom(e.target.value)} placeholder="Nom" /></div>

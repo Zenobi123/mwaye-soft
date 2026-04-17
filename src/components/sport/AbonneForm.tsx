@@ -83,7 +83,7 @@ export function AbonneForm({ salles, onSubmit }: Props) {
               </SelectContent>
             </Select>
           </div>
-          <div><Label>Montant (FCFA)</Label><Input type="number" min="0" required value={form.montant} onChange={e => setForm(f => ({ ...f, montant: e.target.value }))} /></div>
+          <div><Label>Montant (F CFA)</Label><Input type="number" min="0" required value={form.montant} onChange={e => setForm(f => ({ ...f, montant: e.target.value }))} /></div>
           <div><Label>Notes</Label><Input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} /></div>
           <Button type="submit" disabled={loading} className="w-full">{loading ? "Ajout..." : "Ajouter"}</Button>
         </form>

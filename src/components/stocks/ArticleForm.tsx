@@ -43,7 +43,7 @@ export function ArticleForm({ onSubmit, isPending }: Props) {
             <div><Label>Unité</Label><Input value={unite} onChange={e => setUnite(e.target.value)} /></div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div><Label>Prix unitaire (FCFA)</Label><Input type="number" value={prix} onChange={e => setPrix(e.target.value)} /></div>
+            <div><Label>Prix unitaire (F CFA)</Label><Input type="number" value={prix} onChange={e => setPrix(e.target.value)} /></div>
             <div><Label>Emplacement</Label><Input value={emplacement} onChange={e => setEmplacement(e.target.value)} /></div>
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>Ajouter</Button>

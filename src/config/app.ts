@@ -1,6 +1,7 @@
 export const APP_NAME = "MWAYE HOUSE";
 export const APP_SUBTITLE = "Gestion commerciale";
-export const CURRENCY = "FCFA";
+// Espace insécable (U+00A0) entre "F" et "CFA" pour éviter une coupure de ligne.
+export const CURRENCY = "F\u00A0CFA";
 export const LOCALE = "fr-FR";
 
 export function formatAmount(amount: number): string {

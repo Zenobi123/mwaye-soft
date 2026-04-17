@@ -157,7 +157,7 @@ function ParametresPage() {
           <TabsContent value="config">
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                { icon: Building, title: "Informations du complexe", description: "MWAYE HOUSE — Cameroun. Devise : FCFA" },
+                { icon: Building, title: "Informations du complexe", description: "MWAYE HOUSE — Cameroun. Devise : F CFA" },
                 { icon: Bell, title: "Notifications", description: "Alertes de paiement, rappels d'expiration, événements" },
               ].map((s) => (
                 <div
@@ -180,7 +180,7 @@ function ParametresPage() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between py-1 border-b border-border">
                   <span className="text-muted-foreground">Devise</span>
-                  <span className="font-medium">FCFA</span>
+                  <span className="font-medium">F CFA</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-border">
                   <span className="text-muted-foreground">TVA applicable</span>
