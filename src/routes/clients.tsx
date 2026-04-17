@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useClientsData } from "@/hooks/useClientsData";
 import { ClientForm } from "@/components/commercial/ClientForm";
 import { cn } from "@/lib/utils";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/clients")({
   component: ClientsPage,
@@ -26,6 +27,7 @@ function ClientsPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Clients</h1>

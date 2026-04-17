@@ -7,6 +7,7 @@ import { useFacturesData } from "@/hooks/useFacturesData";
 import { useClientsData } from "@/hooks/useClientsData";
 import { FactureForm } from "@/components/commercial/FactureForm";
 import { STATUS_COLORS, formatAmount } from "@/config/app";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/factures")({
   component: FacturesPage,
@@ -31,6 +32,7 @@ function FacturesPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Factures</h1>

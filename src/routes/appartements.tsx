@@ -6,6 +6,7 @@ import { useAppartementsData } from "@/hooks/useAppartementsData";
 import { STATUS_COLORS, formatAmount } from "@/config/app";
 import { AppartementForm } from "@/components/appartements/AppartementForm";
 import { ContratForm } from "@/components/appartements/ContratForm";
+import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/appartements")({
   component: AppartementsPage,
@@ -27,6 +28,7 @@ function AppartementsPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
+        <BackButton />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Appartements</h1>
