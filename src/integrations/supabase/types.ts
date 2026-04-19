@@ -250,6 +250,57 @@ export type Database = {
         }
         Relationships: []
       }
+      bilans_mensuels: {
+        Row: {
+          benefice: number
+          created_at: string
+          detail_depenses: Json
+          detail_recettes: Json
+          genere_par: string | null
+          id: string
+          marge_nette: number
+          mois: string
+          nb_depenses: number
+          nb_recettes: number
+          statut: string
+          total_depenses: number
+          total_recettes: number
+          updated_at: string
+        }
+        Insert: {
+          benefice?: number
+          created_at?: string
+          detail_depenses?: Json
+          detail_recettes?: Json
+          genere_par?: string | null
+          id?: string
+          marge_nette?: number
+          mois: string
+          nb_depenses?: number
+          nb_recettes?: number
+          statut?: string
+          total_depenses?: number
+          total_recettes?: number
+          updated_at?: string
+        }
+        Update: {
+          benefice?: number
+          created_at?: string
+          detail_depenses?: Json
+          detail_recettes?: Json
+          genere_par?: string | null
+          id?: string
+          marge_nette?: number
+          mois?: string
+          nb_depenses?: number
+          nb_recettes?: number
+          statut?: string
+          total_depenses?: number
+          total_recettes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           adresse: string | null
@@ -645,7 +696,10 @@ export type Database = {
       }
       journal_caisse: {
         Row: {
+          cloture_auto: boolean
+          cloture_par: string | null
           created_at: string
+          date_cloture: string | null
           date_journal: string
           id: string
           observations: string | null
@@ -658,7 +712,10 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          cloture_auto?: boolean
+          cloture_par?: string | null
           created_at?: string
+          date_cloture?: string | null
           date_journal: string
           id?: string
           observations?: string | null
@@ -671,7 +728,10 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          cloture_auto?: boolean
+          cloture_par?: string | null
           created_at?: string
+          date_cloture?: string | null
           date_journal?: string
           id?: string
           observations?: string | null
@@ -1103,6 +1163,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculer_bilan_mensuel: { Args: { p_mois: string }; Returns: string }
+      cloturer_journal_jour: { Args: { p_date: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
