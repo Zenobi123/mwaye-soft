@@ -26,6 +26,8 @@ import { Route as DepensesRouteImport } from './routes/depenses'
 import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as AppartementsRouteImport } from './routes/appartements'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HooksClotureJournalRouteImport } from './routes/hooks/cloture-journal'
+import { Route as HooksBilanMensuelRouteImport } from './routes/hooks/bilan-mensuel'
 
 const StocksRoute = StocksRouteImport.update({
   id: '/stocks',
@@ -112,6 +114,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HooksClotureJournalRoute = HooksClotureJournalRouteImport.update({
+  id: '/hooks/cloture-journal',
+  path: '/hooks/cloture-journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HooksBilanMensuelRoute = HooksBilanMensuelRouteImport.update({
+  id: '/hooks/bilan-mensuel',
+  path: '/hooks/bilan-mensuel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +143,8 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
   '/stocks': typeof StocksRoute
+  '/hooks/bilan-mensuel': typeof HooksBilanMensuelRoute
+  '/hooks/cloture-journal': typeof HooksClotureJournalRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +164,8 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
   '/stocks': typeof StocksRoute
+  '/hooks/bilan-mensuel': typeof HooksBilanMensuelRoute
+  '/hooks/cloture-journal': typeof HooksClotureJournalRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,6 +186,8 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/salles-sport': typeof SallesSportRoute
   '/stocks': typeof StocksRoute
+  '/hooks/bilan-mensuel': typeof HooksBilanMensuelRoute
+  '/hooks/cloture-journal': typeof HooksClotureJournalRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +209,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/salles-sport'
     | '/stocks'
+    | '/hooks/bilan-mensuel'
+    | '/hooks/cloture-journal'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +230,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/salles-sport'
     | '/stocks'
+    | '/hooks/bilan-mensuel'
+    | '/hooks/cloture-journal'
   id:
     | '__root__'
     | '/'
@@ -229,6 +251,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/salles-sport'
     | '/stocks'
+    | '/hooks/bilan-mensuel'
+    | '/hooks/cloture-journal'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,6 +273,8 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SallesSportRoute: typeof SallesSportRoute
   StocksRoute: typeof StocksRoute
+  HooksBilanMensuelRoute: typeof HooksBilanMensuelRoute
+  HooksClotureJournalRoute: typeof HooksClotureJournalRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -372,6 +398,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hooks/cloture-journal': {
+      id: '/hooks/cloture-journal'
+      path: '/hooks/cloture-journal'
+      fullPath: '/hooks/cloture-journal'
+      preLoaderRoute: typeof HooksClotureJournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hooks/bilan-mensuel': {
+      id: '/hooks/bilan-mensuel'
+      path: '/hooks/bilan-mensuel'
+      fullPath: '/hooks/bilan-mensuel'
+      preLoaderRoute: typeof HooksBilanMensuelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -393,6 +433,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SallesSportRoute: SallesSportRoute,
   StocksRoute: StocksRoute,
+  HooksBilanMensuelRoute: HooksBilanMensuelRoute,
+  HooksClotureJournalRoute: HooksClotureJournalRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
