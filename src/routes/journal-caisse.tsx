@@ -1,15 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { BookOpen, Lock, Unlock, Loader2, Plus } from "lucide-react";
+import { BookOpen, Lock, Unlock, Loader2, Plus, Zap, FileText, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { formatAmount, STATUS_COLORS } from "@/config/app";
+import { formatAmount } from "@/config/app";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { BackButton } from "@/components/layout/BackButton";
+import { exportJournalPDF, exportJournalExcel } from "@/services/exportService";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/journal-caisse")({
   component: JournalCaissePage,
