@@ -542,6 +542,72 @@ export type Database = {
         }
         Relationships: []
       }
+      etats_lieux: {
+        Row: {
+          appartement_id: string
+          compteur_eau: string | null
+          compteur_elec: string | null
+          contrat_id: string
+          created_at: string
+          date_etat: string
+          etat_general: string
+          id: string
+          observations: string | null
+          pieces_detail: Json
+          signataire: string | null
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appartement_id: string
+          compteur_eau?: string | null
+          compteur_elec?: string | null
+          contrat_id: string
+          created_at?: string
+          date_etat?: string
+          etat_general?: string
+          id?: string
+          observations?: string | null
+          pieces_detail?: Json
+          signataire?: string | null
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appartement_id?: string
+          compteur_eau?: string | null
+          compteur_elec?: string | null
+          contrat_id?: string
+          created_at?: string
+          date_etat?: string
+          etat_general?: string
+          id?: string
+          observations?: string | null
+          pieces_detail?: Json
+          signataire?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "etats_lieux_appartement_id_fkey"
+            columns: ["appartement_id"]
+            isOneToOne: false
+            referencedRelation: "appartements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "etats_lieux_contrat_id_fkey"
+            columns: ["contrat_id"]
+            isOneToOne: false
+            referencedRelation: "contrats_bail"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       factures: {
         Row: {
           client_id: string
@@ -911,6 +977,129 @@ export type Database = {
         }
         Relationships: []
       }
+      quittances: {
+        Row: {
+          appartement_id: string
+          contrat_id: string
+          created_at: string
+          date_echeance: string
+          date_paiement: string | null
+          id: string
+          loyer_base: number
+          mode_paiement: string | null
+          mois_concerne: string
+          montant_paye: number
+          montant_total: number
+          notes: string | null
+          numero: string
+          penalite: number
+          statut: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          appartement_id: string
+          contrat_id: string
+          created_at?: string
+          date_echeance: string
+          date_paiement?: string | null
+          id?: string
+          loyer_base?: number
+          mode_paiement?: string | null
+          mois_concerne: string
+          montant_paye?: number
+          montant_total?: number
+          notes?: string | null
+          numero: string
+          penalite?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          appartement_id?: string
+          contrat_id?: string
+          created_at?: string
+          date_echeance?: string
+          date_paiement?: string | null
+          id?: string
+          loyer_base?: number
+          mode_paiement?: string | null
+          mois_concerne?: string
+          montant_paye?: number
+          montant_total?: number
+          notes?: string | null
+          numero?: string
+          penalite?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quittances_appartement_id_fkey"
+            columns: ["appartement_id"]
+            isOneToOne: false
+            referencedRelation: "appartements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quittances_contrat_id_fkey"
+            columns: ["contrat_id"]
+            isOneToOne: false
+            referencedRelation: "contrats_bail"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rappels_echeance: {
+        Row: {
+          contrat_id: string
+          created_at: string
+          envoye_le: string | null
+          id: string
+          jours_retard: number
+          niveau: number
+          quittance_id: string
+          statut: string
+        }
+        Insert: {
+          contrat_id: string
+          created_at?: string
+          envoye_le?: string | null
+          id?: string
+          jours_retard?: number
+          niveau?: number
+          quittance_id: string
+          statut?: string
+        }
+        Update: {
+          contrat_id?: string
+          created_at?: string
+          envoye_le?: string | null
+          id?: string
+          jours_retard?: number
+          niveau?: number
+          quittance_id?: string
+          statut?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rappels_echeance_contrat_id_fkey"
+            columns: ["contrat_id"]
+            isOneToOne: false
+            referencedRelation: "contrats_bail"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rappels_echeance_quittance_id_fkey"
+            columns: ["quittance_id"]
+            isOneToOne: false
+            referencedRelation: "quittances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recettes: {
         Row: {
           categorie: string
@@ -1163,8 +1352,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      appliquer_penalites_retard: { Args: never; Returns: number }
       calculer_bilan_mensuel: { Args: { p_mois: string }; Returns: string }
       cloturer_journal_jour: { Args: { p_date: string }; Returns: string }
+      generer_quittances_mensuelles: {
+        Args: { p_mois: string }
+        Returns: number
+      }
+      generer_rappels_echeance: { Args: never; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
