@@ -26,6 +26,8 @@ import { Route as DepensesRouteImport } from './routes/depenses'
 import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as AppartementsRouteImport } from './routes/appartements'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HooksQuittancesMensuellesRouteImport } from './routes/hooks/quittances-mensuelles'
+import { Route as HooksPenalitesRappelsRouteImport } from './routes/hooks/penalites-rappels'
 import { Route as HooksClotureJournalRouteImport } from './routes/hooks/cloture-journal'
 import { Route as HooksBilanMensuelRouteImport } from './routes/hooks/bilan-mensuel'
 
@@ -114,6 +116,17 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HooksQuittancesMensuellesRoute =
+  HooksQuittancesMensuellesRouteImport.update({
+    id: '/hooks/quittances-mensuelles',
+    path: '/hooks/quittances-mensuelles',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const HooksPenalitesRappelsRoute = HooksPenalitesRappelsRouteImport.update({
+  id: '/hooks/penalites-rappels',
+  path: '/hooks/penalites-rappels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HooksClotureJournalRoute = HooksClotureJournalRouteImport.update({
   id: '/hooks/cloture-journal',
   path: '/hooks/cloture-journal',
@@ -145,6 +158,8 @@ export interface FileRoutesByFullPath {
   '/stocks': typeof StocksRoute
   '/hooks/bilan-mensuel': typeof HooksBilanMensuelRoute
   '/hooks/cloture-journal': typeof HooksClotureJournalRoute
+  '/hooks/penalites-rappels': typeof HooksPenalitesRappelsRoute
+  '/hooks/quittances-mensuelles': typeof HooksQuittancesMensuellesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -166,6 +181,8 @@ export interface FileRoutesByTo {
   '/stocks': typeof StocksRoute
   '/hooks/bilan-mensuel': typeof HooksBilanMensuelRoute
   '/hooks/cloture-journal': typeof HooksClotureJournalRoute
+  '/hooks/penalites-rappels': typeof HooksPenalitesRappelsRoute
+  '/hooks/quittances-mensuelles': typeof HooksQuittancesMensuellesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -188,6 +205,8 @@ export interface FileRoutesById {
   '/stocks': typeof StocksRoute
   '/hooks/bilan-mensuel': typeof HooksBilanMensuelRoute
   '/hooks/cloture-journal': typeof HooksClotureJournalRoute
+  '/hooks/penalites-rappels': typeof HooksPenalitesRappelsRoute
+  '/hooks/quittances-mensuelles': typeof HooksQuittancesMensuellesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -211,6 +230,8 @@ export interface FileRouteTypes {
     | '/stocks'
     | '/hooks/bilan-mensuel'
     | '/hooks/cloture-journal'
+    | '/hooks/penalites-rappels'
+    | '/hooks/quittances-mensuelles'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -232,6 +253,8 @@ export interface FileRouteTypes {
     | '/stocks'
     | '/hooks/bilan-mensuel'
     | '/hooks/cloture-journal'
+    | '/hooks/penalites-rappels'
+    | '/hooks/quittances-mensuelles'
   id:
     | '__root__'
     | '/'
@@ -253,6 +276,8 @@ export interface FileRouteTypes {
     | '/stocks'
     | '/hooks/bilan-mensuel'
     | '/hooks/cloture-journal'
+    | '/hooks/penalites-rappels'
+    | '/hooks/quittances-mensuelles'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -275,6 +300,8 @@ export interface RootRouteChildren {
   StocksRoute: typeof StocksRoute
   HooksBilanMensuelRoute: typeof HooksBilanMensuelRoute
   HooksClotureJournalRoute: typeof HooksClotureJournalRoute
+  HooksPenalitesRappelsRoute: typeof HooksPenalitesRappelsRoute
+  HooksQuittancesMensuellesRoute: typeof HooksQuittancesMensuellesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -398,6 +425,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hooks/quittances-mensuelles': {
+      id: '/hooks/quittances-mensuelles'
+      path: '/hooks/quittances-mensuelles'
+      fullPath: '/hooks/quittances-mensuelles'
+      preLoaderRoute: typeof HooksQuittancesMensuellesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hooks/penalites-rappels': {
+      id: '/hooks/penalites-rappels'
+      path: '/hooks/penalites-rappels'
+      fullPath: '/hooks/penalites-rappels'
+      preLoaderRoute: typeof HooksPenalitesRappelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hooks/cloture-journal': {
       id: '/hooks/cloture-journal'
       path: '/hooks/cloture-journal'
@@ -435,6 +476,8 @@ const rootRouteChildren: RootRouteChildren = {
   StocksRoute: StocksRoute,
   HooksBilanMensuelRoute: HooksBilanMensuelRoute,
   HooksClotureJournalRoute: HooksClotureJournalRoute,
+  HooksPenalitesRappelsRoute: HooksPenalitesRappelsRoute,
+  HooksQuittancesMensuellesRoute: HooksQuittancesMensuellesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
