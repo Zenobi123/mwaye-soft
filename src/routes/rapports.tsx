@@ -13,6 +13,7 @@ import { formatAmount } from "@/config/app";
 import { exportCSV, exportRapportPDF } from "@/services/rapportExportService";
 import { useState } from "react";
 import { BackButton } from "@/components/layout/BackButton";
+import { BilansMensuels } from "@/components/rapports/BilansMensuels";
 
 export const Route = createFileRoute("/rapports")({
   component: RapportsPage,
@@ -85,7 +86,7 @@ function RapportsPage() {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
             <p className="text-sm text-muted-foreground">Total recettes</p>
             <p className="text-2xl font-bold text-success mt-1">{formatAmount(totalRecettes)}</p>
@@ -98,7 +99,15 @@ function RapportsPage() {
             <p className="text-sm text-muted-foreground">Bénéfice net</p>
             <p className={`text-2xl font-bold mt-1 ${benefice >= 0 ? "text-primary" : "text-destructive"}`}>{formatAmount(benefice)}</p>
           </div>
+          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <p className="text-sm text-muted-foreground">Marge nette</p>
+            <p className={`text-2xl font-bold mt-1 ${benefice >= 0 ? "text-primary" : "text-destructive"}`}>
+              {totalRecettes > 0 ? `${Math.round((benefice / totalRecettes) * 100)}%` : "—"}
+            </p>
+          </div>
         </div>
+
+        <BilansMensuels />
 
         <div className="grid gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3 rounded-xl border border-border bg-card p-5 shadow-sm">
