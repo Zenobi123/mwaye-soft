@@ -96,8 +96,32 @@ function JournalCaissePage() {
   };
 
   const handleClose = async (id: string) => {
-    await supabase.from("journal_caisse").update({ statut: "clôturé" }).eq("id", id);
+    const { data: { user: u } } = await supabase.auth.getUser();
+    await supabase.from("journal_caisse").update({
+      statut: "clôturé",
+      date_cloture: new Date().toISOString(),
+      cloture_par: u?.id,
+    }).eq("id", id);
     fetchJournals();
+  };
+
+  const handleClotureAuto = async () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const { error: rpcError } = await supabase.rpc("cloturer_journal_jour", { p_date: today });
+    if (rpcError) {
+      toast.error("Échec clôture", { description: rpcError.message });
+    } else {
+      toast.success("Journée clôturée automatiquement");
+      fetchJournals();
+    }
+  };
+
+  const handleExportPDF = () => {
+    exportJournalPDF(journals, "30 dernières journées");
+  };
+
+  const handleExportExcel = () => {
+    exportJournalExcel(journals, "30 dernières journées");
   };
 
   if (authLoading) {
@@ -113,9 +137,20 @@ function JournalCaissePage() {
             <h1 className="text-2xl font-bold text-foreground">Journal de caisse</h1>
             <p className="text-sm text-muted-foreground mt-1">Suivi quotidien de la caisse</p>
           </div>
-          <Button size="sm" onClick={() => setShowNew(true)}>
-            <Plus className="h-4 w-4 mr-1" /> Ouvrir une journée
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button size="sm" variant="outline" onClick={handleExportPDF} disabled={journals.length === 0}>
+              <FileText className="h-4 w-4 mr-1" /> PDF
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleExportExcel} disabled={journals.length === 0}>
+              <Download className="h-4 w-4 mr-1" /> Excel
+            </Button>
+            <Button size="sm" variant="secondary" onClick={handleClotureAuto}>
+              <Zap className="h-4 w-4 mr-1" /> Clôture auto du jour
+            </Button>
+            <Button size="sm" onClick={() => setShowNew(true)}>
+              <Plus className="h-4 w-4 mr-1" /> Ouvrir une journée
+            </Button>
+          </div>
         </div>
 
         {showNew && (
