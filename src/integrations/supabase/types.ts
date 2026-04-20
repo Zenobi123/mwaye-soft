@@ -301,6 +301,86 @@ export type Database = {
         }
         Relationships: []
       }
+      bulletins_paie: {
+        Row: {
+          autres_retenues: number
+          cnps_employe: number
+          cnps_employeur: number
+          cout_total_employeur: number
+          created_at: string
+          date_paiement: string | null
+          depense_id: string | null
+          employe_id: string
+          heures_sup: number
+          id: string
+          irpp: number
+          mode_paiement: string | null
+          mois: string
+          notes: string | null
+          numero: string
+          prime: number
+          salaire_brut: number
+          salaire_net: number
+          statut: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          autres_retenues?: number
+          cnps_employe?: number
+          cnps_employeur?: number
+          cout_total_employeur?: number
+          created_at?: string
+          date_paiement?: string | null
+          depense_id?: string | null
+          employe_id: string
+          heures_sup?: number
+          id?: string
+          irpp?: number
+          mode_paiement?: string | null
+          mois: string
+          notes?: string | null
+          numero: string
+          prime?: number
+          salaire_brut?: number
+          salaire_net?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          autres_retenues?: number
+          cnps_employe?: number
+          cnps_employeur?: number
+          cout_total_employeur?: number
+          created_at?: string
+          date_paiement?: string | null
+          depense_id?: string | null
+          employe_id?: string
+          heures_sup?: number
+          id?: string
+          irpp?: number
+          mode_paiement?: string | null
+          mois?: string
+          notes?: string | null
+          numero?: string
+          prime?: number
+          salaire_brut?: number
+          salaire_net?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bulletins_paie_employe_id_fkey"
+            columns: ["employe_id"]
+            isOneToOne: false
+            referencedRelation: "employes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           adresse: string | null
@@ -339,6 +419,62 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      conges: {
+        Row: {
+          approuve_le: string | null
+          approuve_par: string | null
+          created_at: string
+          date_debut: string
+          date_fin: string
+          employe_id: string
+          id: string
+          motif: string | null
+          nb_jours: number
+          statut: string
+          type_conge: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approuve_le?: string | null
+          approuve_par?: string | null
+          created_at?: string
+          date_debut: string
+          date_fin: string
+          employe_id: string
+          id?: string
+          motif?: string | null
+          nb_jours?: number
+          statut?: string
+          type_conge?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approuve_le?: string | null
+          approuve_par?: string | null
+          created_at?: string
+          date_debut?: string
+          date_fin?: string
+          employe_id?: string
+          id?: string
+          motif?: string | null
+          nb_jours?: number
+          statut?: string
+          type_conge?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conges_employe_id_fkey"
+            columns: ["employe_id"]
+            isOneToOne: false
+            referencedRelation: "employes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contrats_bail: {
         Row: {
@@ -906,6 +1042,56 @@ export type Database = {
           },
         ]
       }
+      plannings: {
+        Row: {
+          created_at: string
+          date_planning: string
+          employe_id: string
+          heure_debut: string
+          heure_fin: string
+          id: string
+          notes: string | null
+          poste_assigne: string | null
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_planning: string
+          employe_id: string
+          heure_debut: string
+          heure_fin: string
+          id?: string
+          notes?: string | null
+          poste_assigne?: string | null
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_planning?: string
+          employe_id?: string
+          heure_debut?: string
+          heure_fin?: string
+          id?: string
+          notes?: string | null
+          poste_assigne?: string | null
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plannings_employe_id_fkey"
+            columns: ["employe_id"]
+            isOneToOne: false
+            referencedRelation: "employes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       presences: {
         Row: {
           created_at: string
@@ -1355,6 +1541,7 @@ export type Database = {
       appliquer_penalites_retard: { Args: never; Returns: number }
       calculer_bilan_mensuel: { Args: { p_mois: string }; Returns: string }
       cloturer_journal_jour: { Args: { p_date: string }; Returns: string }
+      generer_bulletins_mensuels: { Args: { p_mois: string }; Returns: number }
       generer_quittances_mensuelles: {
         Args: { p_mois: string }
         Returns: number
@@ -1366,6 +1553,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      valider_bulletin_et_creer_depense: {
+        Args: { p_bulletin_id: string }
+        Returns: string
       }
     }
     Enums: {
