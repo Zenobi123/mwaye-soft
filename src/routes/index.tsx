@@ -6,12 +6,16 @@ import { UpcomingEvents } from "@/components/dashboard/UpcomingEvents";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
 import { FacilityStatus } from "@/components/dashboard/FacilityStatus";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import { usePaie } from "@/hooks/usePaie";
+import { useConges } from "@/hooks/useConges";
 import { formatAmount } from "@/config/app";
 import {
   ArrowDownCircle,
   ArrowUpCircle,
   TrendingUp,
   Loader2,
+  Wallet,
+  CalendarDays,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
