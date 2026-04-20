@@ -6,12 +6,16 @@ import { UpcomingEvents } from "@/components/dashboard/UpcomingEvents";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
 import { FacilityStatus } from "@/components/dashboard/FacilityStatus";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import { usePaie } from "@/hooks/usePaie";
+import { useConges } from "@/hooks/useConges";
 import { formatAmount } from "@/config/app";
 import {
   ArrowDownCircle,
   ArrowUpCircle,
   TrendingUp,
   Loader2,
+  Wallet,
+  CalendarDays,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -26,6 +30,8 @@ export const Route = createFileRoute("/")({
 
 function Dashboard() {
   const { recettesJour, depensesJour, recettesSemaine, recentRecettes, recentDepenses, loading } = useDashboardData();
+  const { masseSalarialeMois } = usePaie();
+  const { enCours } = useConges();
   const benefice = recettesJour - depensesJour;
   const today = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
@@ -45,7 +51,7 @@ function Dashboard() {
           </div>
         ) : (
           <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               <KpiCard
                 title="Recettes du jour"
                 value={formatAmount(recettesJour)}
@@ -66,6 +72,20 @@ function Dashboard() {
                 changeType={benefice >= 0 ? "positive" : "negative"}
                 icon={TrendingUp}
                 iconBg="bg-primary/10 text-primary"
+              />
+              <KpiCard
+                title="Masse salariale (mois)"
+                value={formatAmount(masseSalarialeMois)}
+                changeType="neutral"
+                icon={Wallet}
+                iconBg="bg-warning/10 text-warning"
+              />
+              <KpiCard
+                title="Congés en cours"
+                value={String(enCours.length)}
+                changeType="neutral"
+                icon={CalendarDays}
+                iconBg="bg-info/10 text-info"
               />
             </div>
 
