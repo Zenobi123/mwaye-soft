@@ -9,6 +9,8 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { usePaie } from "@/hooks/usePaie";
 import { useConges } from "@/hooks/useConges";
 import { useStocksData } from "@/hooks/useStocksData";
+import { useComparaisonMensuelle } from "@/hooks/useComparaisonMensuelle";
+import { ComparaisonMensuelle } from "@/components/rapports/ComparaisonMensuelle";
 import { formatAmount } from "@/config/app";
 import {
   ArrowDownCircle,
@@ -35,7 +37,13 @@ function Dashboard() {
   const { masseSalarialeMois } = usePaie();
   const { enCours } = useConges();
   const { valeurStockTotal, alertes } = useStocksData();
+  const { data: comparaison } = useComparaisonMensuelle(2);
   const benefice = recettesJour - depensesJour;
+  const moisCourant = comparaison?.[1];
+  const moisPrecedent = comparaison?.[0];
+  const variationBenef = moisCourant && moisPrecedent && moisPrecedent.benefice !== 0
+    ? Math.round(((moisCourant.benefice - moisPrecedent.benefice) / Math.abs(moisPrecedent.benefice)) * 100)
+    : 0;
   const today = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
   return (
@@ -107,6 +115,18 @@ function Dashboard() {
                 <FacilityStatus />
               </div>
             </div>
+
+            {moisCourant && (
+              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-card-foreground">Tendance — bénéfice mensuel</h3>
+                  <span className={`text-sm font-medium ${variationBenef >= 0 ? "text-success" : "text-destructive"}`}>
+                    {variationBenef >= 0 ? "▲" : "▼"} {Math.abs(variationBenef)}% vs mois précédent
+                  </span>
+                </div>
+                <ComparaisonMensuelle nbMois={6} />
+              </div>
+            )}
 
             <div className="grid gap-6 lg:grid-cols-2">
               <RecentTransactions recettes={recentRecettes} depenses={recentDepenses} />
