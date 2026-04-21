@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowUpDown } from "lucide-react";
 
 interface Article { id: string; nom: string }
 interface Props {
   articles: Article[];
-  onSubmit: (v: { article_id: string; type_mouvement: string; quantite: number; motif?: string }) => void;
+  onSubmit: (v: { article_id: string; type_mouvement: string; quantite: number; motif?: string; prix_unitaire?: number; fournisseur?: string; creer_depense?: boolean }) => void;
   isPending: boolean;
 }
 
@@ -18,12 +19,25 @@ export function MouvementForm({ articles, onSubmit, isPending }: Props) {
   const [articleId, setArticleId] = useState("");
   const [type, setType] = useState("entrée");
   const [quantite, setQuantite] = useState("1");
+  const [prix, setPrix] = useState("0");
+  const [fournisseur, setFournisseur] = useState("");
   const [motif, setMotif] = useState("");
+  const [creerDepense, setCreerDepense] = useState(false);
+
+  const isEntree = type === "entrée";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ article_id: articleId, type_mouvement: type, quantite: parseInt(quantite), motif: motif || undefined });
-    setQuantite("1"); setMotif("");
+    onSubmit({
+      article_id: articleId,
+      type_mouvement: type,
+      quantite: parseInt(quantite),
+      motif: motif || undefined,
+      prix_unitaire: isEntree ? parseFloat(prix) || 0 : undefined,
+      fournisseur: isEntree ? (fournisseur || undefined) : undefined,
+      creer_depense: isEntree ? creerDepense : false,
+    });
+    setQuantite("1"); setMotif(""); setPrix("0"); setFournisseur(""); setCreerDepense(false);
     setOpen(false);
   };
 
@@ -53,7 +67,19 @@ export function MouvementForm({ articles, onSubmit, isPending }: Props) {
             </div>
             <div><Label>Quantité</Label><Input type="number" value={quantite} onChange={e => setQuantite(e.target.value)} min="1" required /></div>
           </div>
-          <div><Label>Motif</Label><Input value={motif} onChange={e => setMotif(e.target.value)} placeholder="Réapprovisionnement, consommation..." /></div>
+          {isEntree && (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div><Label>Prix unitaire (FCFA)</Label><Input type="number" value={prix} onChange={e => setPrix(e.target.value)} min="0" step="0.01" /></div>
+                <div><Label>Fournisseur</Label><Input value={fournisseur} onChange={e => setFournisseur(e.target.value)} placeholder="Nom fournisseur" /></div>
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <Checkbox checked={creerDepense} onCheckedChange={(v) => setCreerDepense(v === true)} />
+                <span>Créer une dépense (en attente) liée à cet achat</span>
+              </label>
+            </>
+          )}
+          <div><Label>Motif / référence</Label><Input value={motif} onChange={e => setMotif(e.target.value)} placeholder="Réapprovisionnement, BL n°…" /></div>
           <Button type="submit" className="w-full" disabled={isPending || !articleId}>Enregistrer</Button>
         </form>
       </DialogContent>
