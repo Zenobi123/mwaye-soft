@@ -8,6 +8,7 @@ import { FacilityStatus } from "@/components/dashboard/FacilityStatus";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { usePaie } from "@/hooks/usePaie";
 import { useConges } from "@/hooks/useConges";
+import { useStocksData } from "@/hooks/useStocksData";
 import { formatAmount } from "@/config/app";
 import {
   ArrowDownCircle,
@@ -16,6 +17,7 @@ import {
   Loader2,
   Wallet,
   CalendarDays,
+  Package,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -32,6 +34,7 @@ function Dashboard() {
   const { recettesJour, depensesJour, recettesSemaine, recentRecettes, recentDepenses, loading } = useDashboardData();
   const { masseSalarialeMois } = usePaie();
   const { enCours } = useConges();
+  const { valeurStockTotal, alertes } = useStocksData();
   const benefice = recettesJour - depensesJour;
   const today = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
@@ -86,6 +89,13 @@ function Dashboard() {
                 changeType="neutral"
                 icon={CalendarDays}
                 iconBg="bg-info/10 text-info"
+              />
+              <KpiCard
+                title="Valeur stock"
+                value={formatAmount(valeurStockTotal)}
+                changeType={alertes.length > 0 ? "negative" : "neutral"}
+                icon={Package}
+                iconBg="bg-accent/10 text-accent"
               />
             </div>
 
