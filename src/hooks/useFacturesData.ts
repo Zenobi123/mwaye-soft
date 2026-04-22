@@ -12,7 +12,7 @@ export function useFacturesData() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("factures")
-        .select("*, clients(nom), lignes_document(*)")
+        .select("*, clients(nom, adresse, telephone, email), lignes_document(*)")
         .order("date_facture", { ascending: false });
       if (error) throw error;
       return data;
@@ -27,7 +27,9 @@ export function useFacturesData() {
       lignes: { description: string; quantite: number; prix_unitaire: number; montant: number }[];
     }) => {
       const { lignes, ...factureData } = values;
-      const { data, error } = await supabase.from("factures").insert({ ...factureData, user_id: user!.id }).select("id").single();
+      const { data, error } = await supabase.from("factures").insert({
+        ...factureData, statut: "emise", user_id: user!.id,
+      }).select("id").single();
       if (error) throw error;
       if (lignes.length > 0) {
         const lignesInsert = lignes.map((l, i) => ({ ...l, facture_id: data.id, user_id: user!.id, ordre: i }));
@@ -48,6 +50,47 @@ export function useFacturesData() {
     onError: (e) => toast.error(e.message),
   });
 
+  const marquerPayee = useMutation({
+    mutationFn: async ({ id, mode_paiement }: { id: string; mode_paiement: string }) => {
+      const { error } = await supabase.rpc("marquer_facture_payee", {
+        p_facture_id: id, p_mode_paiement: mode_paiement,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["factures"] });
+      queryClient.invalidateQueries({ queryKey: ["recettes"] });
+      toast.success("Facture marquée payée et recette créée");
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const marquerEnRetard = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc("marquer_factures_en_retard");
+      if (error) throw error;
+      return data as number;
+    },
+    onSuccess: (n) => {
+      queryClient.invalidateQueries({ queryKey: ["factures"] });
+      toast.success(`${n} facture(s) marquée(s) en retard`);
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const enregistrerRelance = useMutation({
+    mutationFn: async ({ id, niveau, notes }: { id: string; niveau: number; notes?: string }) => {
+      const { error } = await supabase.from("factures").update({
+        date_relance: new Date().toISOString().slice(0, 10),
+        niveau_relance: niveau,
+        notes_relance: notes ?? null,
+      }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["factures"] }); toast.success("Relance enregistrée"); },
+    onError: (e) => toast.error(e.message),
+  });
+
   const deleteFacture = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("factures").delete().eq("id", id);
@@ -57,5 +100,10 @@ export function useFacturesData() {
     onError: (e) => toast.error(e.message),
   });
 
-  return { factures: facturesQuery.data ?? [], isLoading: facturesQuery.isLoading, addFacture, updateStatut, deleteFacture };
+  return {
+    factures: facturesQuery.data ?? [],
+    isLoading: facturesQuery.isLoading,
+    addFacture, updateStatut, marquerPayee, marquerEnRetard,
+    enregistrerRelance, deleteFacture,
+  };
 }
