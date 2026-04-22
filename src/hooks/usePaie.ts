@@ -64,7 +64,7 @@ export function usePaie() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const exporterPDF = (b: any) => {
+  const exporterPDF = (b: unknown) => {
     telechargerBulletin({
       numero: b.numero,
       mois: b.mois,
@@ -86,8 +86,8 @@ export function usePaie() {
   const masseSalarialeMois = (() => {
     const m = new Date().toISOString().slice(0, 7);
     return bulletins
-      .filter((b: any) => b.mois?.startsWith(m))
-      .reduce((s: number, b: any) => s + Number(b.cout_total_employeur), 0);
+      .filter((b: unknown) => b.mois?.startsWith(m))
+      .reduce((s: number, b: unknown) => s + Number(b.cout_total_employeur), 0);
   })();
 
   return { bulletins, masseSalarialeMois, isLoading: bulletinsQuery.isLoading, generer, valider, marquerPaye, exporterPDF };

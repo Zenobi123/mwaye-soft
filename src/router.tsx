@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter, useRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";

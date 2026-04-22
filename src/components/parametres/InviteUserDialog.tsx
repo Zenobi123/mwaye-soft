@@ -63,7 +63,7 @@ export function InviteUserDialog({ onCreated }: Props) {
       reset();
       setOpen(false);
       onCreated();
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err?.message ?? "Erreur inattendue");
     } finally {
       setLoading(false);

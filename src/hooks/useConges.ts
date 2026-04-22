@@ -52,7 +52,7 @@ export function useConges() {
   });
 
   const conges = congesQuery.data ?? [];
-  const enCours = conges.filter((c: any) => c.statut === "approuvé" && new Date(c.date_fin) >= new Date());
+  const enCours = conges.filter((c: unknown) => c.statut === "approuvé" && new Date(c.date_fin) >= new Date());
 
   return { conges, enCours, isLoading: congesQuery.isLoading, creer, decider, supprimer };
 }

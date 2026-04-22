@@ -18,7 +18,7 @@ export function QuittancesTab() {
   const [mode, setMode] = useState("Espèces");
   const [moisCible, setMoisCible] = useState(new Date().toISOString().slice(0, 7));
 
-  const downloadPDF = (q: any) => {
+  const downloadPDF = (q: unknown) => {
     exportQuittancePDF({
       numero: q.numero,
       mois_concerne: q.mois_concerne,
@@ -89,7 +89,7 @@ export function QuittancesTab() {
           <tbody className="divide-y divide-border">
             {quittances.length === 0 ? (
               <tr><td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">Aucune quittance. Cliquez "Générer" pour créer celles du mois.</td></tr>
-            ) : quittances.map((q: any) => (
+            ) : quittances.map((q: unknown) => (
               <tr key={q.id} className="hover:bg-muted/30">
                 <td className="px-4 py-3 font-mono text-xs">{q.numero}</td>
                 <td className="px-4 py-3">

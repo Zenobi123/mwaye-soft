@@ -137,7 +137,7 @@ function StocksPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {mouvements.map((m: any) => (
+                    {mouvements.map((m: unknown) => (
                       <tr key={m.id} className="hover:bg-muted/30 transition-colors">
                         <td className="px-5 py-3.5 text-muted-foreground">{m.date_mouvement}</td>
                         <td className="px-5 py-3.5 font-medium text-card-foreground">{m.articles_stock?.nom ?? "—"}</td>
@@ -177,7 +177,7 @@ function StocksPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {lots.map((l: any) => (
+                    {lots.map((l: unknown) => (
                       <tr key={l.id} className="hover:bg-muted/30 transition-colors">
                         <td className="px-5 py-3.5 text-muted-foreground">{l.date_entree}</td>
                         <td className="px-5 py-3.5 font-medium">{l.articles_stock?.nom ?? "—"}</td>
