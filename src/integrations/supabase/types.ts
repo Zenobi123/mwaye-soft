@@ -756,11 +756,16 @@ export type Database = {
           created_at: string
           date_echeance: string | null
           date_facture: string
+          date_paiement: string | null
+          date_relance: string | null
           devis_id: string | null
           id: string
           montant_total: number
+          niveau_relance: number
           notes: string | null
+          notes_relance: string | null
           numero: string
+          recette_id: string | null
           statut: string
           updated_at: string
           user_id: string
@@ -770,11 +775,16 @@ export type Database = {
           created_at?: string
           date_echeance?: string | null
           date_facture?: string
+          date_paiement?: string | null
+          date_relance?: string | null
           devis_id?: string | null
           id?: string
           montant_total?: number
+          niveau_relance?: number
           notes?: string | null
+          notes_relance?: string | null
           numero: string
+          recette_id?: string | null
           statut?: string
           updated_at?: string
           user_id: string
@@ -784,11 +794,16 @@ export type Database = {
           created_at?: string
           date_echeance?: string | null
           date_facture?: string
+          date_paiement?: string | null
+          date_relance?: string | null
           devis_id?: string | null
           id?: string
           montant_total?: number
+          niveau_relance?: number
           notes?: string | null
+          notes_relance?: string | null
           numero?: string
+          recette_id?: string | null
           statut?: string
           updated_at?: string
           user_id?: string
@@ -1715,6 +1730,10 @@ export type Database = {
         Args: { p_article_id: string; p_quantite: number }
         Returns: number
       }
+      convertir_devis_en_facture: {
+        Args: { p_date_echeance?: string; p_devis_id: string }
+        Returns: string
+      }
       generer_bulletins_mensuels: { Args: { p_mois: string }; Returns: number }
       generer_quittances_mensuelles: {
         Args: { p_mois: string }
@@ -1728,6 +1747,11 @@ export type Database = {
         }
         Returns: boolean
       }
+      marquer_facture_payee: {
+        Args: { p_facture_id: string; p_mode_paiement?: string }
+        Returns: string
+      }
+      marquer_factures_en_retard: { Args: never; Returns: number }
       valider_bulletin_et_creer_depense: {
         Args: { p_bulletin_id: string }
         Returns: string
