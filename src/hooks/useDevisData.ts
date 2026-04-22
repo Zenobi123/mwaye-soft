@@ -50,10 +50,9 @@ export function useDevisData() {
 
   const convertirEnFacture = useMutation({
     mutationFn: async ({ devis_id, date_echeance }: { devis_id: string; date_echeance?: string }) => {
-      const { data, error } = await supabase.rpc("convertir_devis_en_facture", {
-        p_devis_id: devis_id,
-        p_date_echeance: date_echeance ?? null,
-      });
+      const args: { p_devis_id: string; p_date_echeance?: string } = { p_devis_id: devis_id };
+      if (date_echeance) args.p_date_echeance = date_echeance;
+      const { data, error } = await supabase.rpc("convertir_devis_en_facture", args);
       if (error) throw error;
       return data as string;
     },
