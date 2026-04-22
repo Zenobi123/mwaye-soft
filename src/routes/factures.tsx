@@ -41,7 +41,7 @@ function FacturesPage() {
   const { settings } = useAppSettings();
   const [tab, setTab] = useState("toutes");
 
-  const enriched = useMemo(() => factures.map((f: any) => {
+  const enriched = useMemo(() => factures.map((f: unknown) => {
     const isLate = f.statut !== "payee" && f.statut !== "annulee" && f.date_echeance && new Date(f.date_echeance) < new Date();
     return { ...f, _enRetard: isLate || f.statut === "en_retard" };
   }), [factures]);
@@ -68,7 +68,7 @@ function FacturesPage() {
     return <AppLayout><div className="flex items-center justify-center h-64"><p className="text-muted-foreground">Chargement...</p></div></AppLayout>;
   }
 
-  const handlePDF = (f: any) => {
+  const handlePDF = (f: unknown) => {
     exportDocumentPDF({
       type: "FACTURE",
       numero: f.numero,
@@ -78,7 +78,7 @@ function FacturesPage() {
       client_adresse: f.clients?.adresse,
       client_telephone: f.clients?.telephone,
       client_email: f.clients?.email,
-      lignes: (f.lignes_document ?? []).sort((a: any, b: any) => a.ordre - b.ordre).map((l: any) => ({
+      lignes: (f.lignes_document ?? []).sort((a: unknown, b: unknown) => a.ordre - b.ordre).map((l: unknown) => ({
         description: l.description, quantite: Number(l.quantite),
         prix_unitaire: Number(l.prix_unitaire), montant: Number(l.montant),
       })),
@@ -91,7 +91,7 @@ function FacturesPage() {
     });
   };
 
-  const handlePayer = (f: any) => {
+  const handlePayer = (f: unknown) => {
     const mode = prompt("Mode de paiement (Espèces / Virement / Mobile Money / Chèque) :", "Espèces");
     if (mode) marquerPayee.mutate({ id: f.id, mode_paiement: mode });
   };
@@ -172,7 +172,7 @@ function FacturesPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {filtered.map((f: any) => (
+                      {filtered.map((f: unknown) => (
                         <tr key={f.id} className="hover:bg-muted/30 transition-colors">
                           <td className="px-5 py-3.5 font-medium">{f.numero}</td>
                           <td className="px-5 py-3.5 text-muted-foreground">{f.clients?.nom ?? "—"}</td>

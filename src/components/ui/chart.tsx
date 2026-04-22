@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-expect-error Recharts type definitions are incomplete
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 

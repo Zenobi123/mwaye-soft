@@ -50,7 +50,7 @@ function ParametresPage() {
   const handleAssign = async (userId: string) => {
     const role = selectedRole[userId];
     if (!role) return;
-    await assignRole(userId, role as any);
+    await assignRole(userId, role as unknown);
     setSelectedRole((prev) => ({ ...prev, [userId]: "" }));
   };
 
@@ -64,7 +64,7 @@ function ParametresPage() {
       } else {
         toast.error(res.error);
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.error(e?.message ?? "Échec de la suppression");
     } finally {
       setDeletingId(null);

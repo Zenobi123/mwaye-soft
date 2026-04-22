@@ -41,8 +41,8 @@ export function useRapportsData(filters: Filters) {
     enabled: !!user,
   });
 
-  const recettes = recettesQuery.data ?? [];
-  const depenses = depensesQuery.data ?? [];
+  const recettes = useMemo(() => recettesQuery.data ?? [], [recettesQuery.data]);
+  const depenses = useMemo(() => depensesQuery.data ?? [], [depensesQuery.data]);
 
   const stats = useMemo(() => {
     const totalRecettes = recettes.reduce((s, r) => s + Number(r.montant), 0);

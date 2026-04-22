@@ -45,7 +45,7 @@ function LoginPage() {
         await resetPassword(email);
         setSuccess("Un email de réinitialisation a été envoyé.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || "Une erreur est survenue");
     } finally {
       setLoading(false);

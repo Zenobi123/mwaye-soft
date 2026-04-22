@@ -172,7 +172,7 @@ export function EtatsLieuxTab() {
                 <ClipboardCheck className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 Aucun état des lieux enregistré.
               </td></tr>
-            ) : etats.map((e: any) => (
+            ) : etats.map((e: unknown) => (
               <tr key={e.id} className="hover:bg-muted/30">
                 <td className="px-4 py-3">{new Date(e.date_etat).toLocaleDateString("fr-FR")}</td>
                 <td className="px-4 py-3">

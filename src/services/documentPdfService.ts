@@ -97,7 +97,7 @@ export function exportDocumentPDF(doc_data: DocumentPDFData) {
   });
 
   // Totaux
-  const finalY = (pdf as any).lastAutoTable.finalY + 6;
+  const finalY = (pdf as unknown).lastAutoTable.finalY + 6;
   const ht = doc_data.montant_total;
   const tvaRate = doc_data.tva_rate ?? 0;
   const tva = Math.round(ht * tvaRate / 100);

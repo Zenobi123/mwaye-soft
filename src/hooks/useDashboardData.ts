@@ -72,8 +72,8 @@ export function useDashboardData(): DashboardData {
       recettesJour,
       depensesJour,
       recettesSemaine,
-      recentRecettes: (recentRecRes.data as any[]) || [],
-      recentDepenses: (recentDepRes.data as any[]) || [],
+      recentRecettes: (recentRecRes.data as unknown[]) || [],
+      recentDepenses: (recentDepRes.data as unknown[]) || [],
       loading: false,
     });
   }, []);

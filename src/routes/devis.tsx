@@ -40,7 +40,7 @@ function DevisPage() {
   const acceptes = devis.filter((d) => d.statut === "accepte" || d.statut === "accepté").reduce((s, d) => s + Number(d.montant_total), 0);
   const enAttente = devis.filter((d) => ["brouillon", "envoyée", "envoyé", "emise"].includes(d.statut)).reduce((s, d) => s + Number(d.montant_total), 0);
 
-  const handlePDF = (d: any) => {
+  const handlePDF = (d: unknown) => {
     exportDocumentPDF({
       type: "DEVIS",
       numero: d.numero,
@@ -50,7 +50,7 @@ function DevisPage() {
       client_adresse: d.clients?.adresse,
       client_telephone: d.clients?.telephone,
       client_email: d.clients?.email,
-      lignes: (d.lignes_document ?? []).sort((a: any, b: any) => a.ordre - b.ordre).map((l: any) => ({
+      lignes: (d.lignes_document ?? []).sort((a: unknown, b: unknown) => a.ordre - b.ordre).map((l: unknown) => ({
         description: l.description, quantite: Number(l.quantite),
         prix_unitaire: Number(l.prix_unitaire), montant: Number(l.montant),
       })),
@@ -108,7 +108,7 @@ function DevisPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {devis.map((d: any) => (
+                {devis.map((d: unknown) => (
                   <tr key={d.id} className="hover:bg-muted/30 transition-colors">
                     <td className="px-5 py-3.5 font-medium text-card-foreground">{d.numero}</td>
                     <td className="px-5 py-3.5 text-muted-foreground">{d.clients?.nom ?? "—"}</td>

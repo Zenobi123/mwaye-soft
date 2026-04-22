@@ -11,7 +11,7 @@ import type { Tables } from "@/integrations/supabase/types";
 
 interface Props {
   salles: Tables<"salles_sport">[];
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: unknown) => Promise<void>;
 }
 
 export function SeanceForm({ salles, onSubmit }: Props) {
