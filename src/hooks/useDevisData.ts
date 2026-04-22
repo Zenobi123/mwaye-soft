@@ -12,7 +12,7 @@ export function useDevisData() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("devis")
-        .select("*, clients(nom), lignes_document(*)")
+        .select("*, clients(nom, adresse, telephone, email), lignes_document(*)")
         .order("date_devis", { ascending: false });
       if (error) throw error;
       return data;
@@ -39,6 +39,32 @@ export function useDevisData() {
     onError: (e) => toast.error(e.message),
   });
 
+  const updateStatutDevis = useMutation({
+    mutationFn: async ({ id, statut }: { id: string; statut: string }) => {
+      const { error } = await supabase.from("devis").update({ statut }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["devis"] }); toast.success("Statut mis à jour"); },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const convertirEnFacture = useMutation({
+    mutationFn: async ({ devis_id, date_echeance }: { devis_id: string; date_echeance?: string }) => {
+      const { data, error } = await supabase.rpc("convertir_devis_en_facture", {
+        p_devis_id: devis_id,
+        p_date_echeance: date_echeance ?? null,
+      });
+      if (error) throw error;
+      return data as string;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["devis"] });
+      queryClient.invalidateQueries({ queryKey: ["factures"] });
+      toast.success("Devis converti en facture");
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
   const deleteDevis = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("devis").delete().eq("id", id);
@@ -48,5 +74,9 @@ export function useDevisData() {
     onError: (e) => toast.error(e.message),
   });
 
-  return { devis: devisQuery.data ?? [], isLoading: devisQuery.isLoading, addDevis, deleteDevis };
+  return {
+    devis: devisQuery.data ?? [],
+    isLoading: devisQuery.isLoading,
+    addDevis, updateStatutDevis, convertirEnFacture, deleteDevis,
+  };
 }
