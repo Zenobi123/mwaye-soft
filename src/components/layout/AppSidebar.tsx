@@ -1,7 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, LogOut, X, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { navItems } from "@/config/navigation";
+import { navItems, getNavGroups } from "@/config/navigation";
 import { canAccessRoute } from "@/config/roleAccess";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { useAuth } from "@/hooks/useAuth";
@@ -76,52 +76,59 @@ export function AppSidebar({ collapsed, onToggleCollapse, mobileOpen, onMobileCl
       </div>
 
       {/* Navigation : py-4 (16 px), px-2 (8 px), space-y-1 (4 px) */}
-      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-1">
+      <nav className="flex-1 overflow-y-auto py-4 px-2">
         <TooltipProvider delayDuration={150}>
-          {visibleItems.map((item) => {
-            const isActive =
-              item.to === "/"
-                ? location.pathname === "/"
-                : location.pathname.startsWith(item.to);
+          {getNavGroups(visibleItems).map(({ group, items }) => (
+            <div key={group} className="mb-3">
+              {(!collapsed || isMobile) && (
+                <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 select-none">
+                  {group}
+                </p>
+              )}
+              <div className="space-y-0.5">
+                {items.map((item) => {
+                  const isActive =
+                    item.to === "/"
+                      ? location.pathname === "/"
+                      : location.pathname.startsWith(item.to);
 
-            const linkContent = (
-              <Link
-                to={item.to}
-                onClick={isMobile ? onMobileClose : undefined}
-                className={cn(
-                  // Hauteur ~40 px : py-2.5 (10×2) + ligne icône 20 px
-                  "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors",
-                  collapsed && !isMobile && "justify-center",
-                  isActive
-                    ? "bg-primary/10 text-primary font-medium"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                {/* Icônes de navigation : 20×20 px */}
-                <item.icon className="h-5 w-5 shrink-0" />
-                {(!collapsed || isMobile) && (
-                  <>
-                    <span className="truncate flex-1">{item.label}</span>
-                    {/* Chevron actif : 16×16 px */}
-                    {isActive && <ChevronRight className="h-4 w-4 shrink-0" />}
-                  </>
-                )}
-              </Link>
-            );
+                  const linkContent = (
+                    <Link
+                      to={item.to}
+                      onClick={isMobile ? onMobileClose : undefined}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors",
+                        collapsed && !isMobile && "justify-center",
+                        isActive
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                    >
+                      <item.icon className="h-5 w-5 shrink-0" />
+                      {(!collapsed || isMobile) && (
+                        <>
+                          <span className="truncate flex-1">{item.label}</span>
+                          {isActive && <ChevronRight className="h-4 w-4 shrink-0" />}
+                        </>
+                      )}
+                    </Link>
+                  );
 
-            // Tooltip uniquement en mode réduit desktop, décalée à 56 px (left-14)
-            if (collapsed && !isMobile) {
-              return (
-                <Tooltip key={item.to}>
-                  <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={8} className="text-xs">
-                    {item.label}
-                  </TooltipContent>
-                </Tooltip>
-              );
-            }
-            return <div key={item.to}>{linkContent}</div>;
-          })}
+                  if (collapsed && !isMobile) {
+                    return (
+                      <Tooltip key={item.to}>
+                        <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+                        <TooltipContent side="right" sideOffset={8} className="text-xs">
+                          {item.label}
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  }
+                  return <div key={item.to}>{linkContent}</div>;
+                })}
+              </div>
+            </div>
+          ))}
         </TooltipProvider>
       </nav>
 
