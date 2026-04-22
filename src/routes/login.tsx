@@ -39,8 +39,8 @@ function LoginPage() {
         navigate({ to: "/" });
       } else if (mode === "register") {
         await signUp(email, password, fullName);
-        setSuccess("Compte créé ! Vérifiez votre email pour confirmer votre inscription.");
-        setMode("login");
+        // Auto-confirm activé : l'utilisateur est connecté immédiatement
+        navigate({ to: "/" });
       } else {
         await resetPassword(email);
         setSuccess("Un email de réinitialisation a été envoyé.");
