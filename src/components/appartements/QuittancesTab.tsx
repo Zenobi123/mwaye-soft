@@ -37,7 +37,7 @@ export function QuittancesTab() {
     exportQuittancePDF({
       numero: q.numero,
       mois_concerne: q.mois_concerne,
-      date_echeance: q.date_echeance,
+      date_echeance: q.date_echeance ?? "",
       loyer_base: Number(q.loyer_base),
       penalite: Number(q.penalite),
       montant_total: Number(q.montant_total),

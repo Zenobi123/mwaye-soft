@@ -10,6 +10,22 @@ interface DashboardData {
   loading: boolean;
 }
 
+interface RecentRecette {
+  id: string;
+  libelle: string;
+  montant: number;
+  date_recette: string;
+  categorie: string;
+}
+
+interface RecentDepense {
+  id: string;
+  libelle: string;
+  montant: number;
+  date_depense: string;
+  categorie: string;
+}
+
 function getWeekDates() {
   const today = new Date();
   const day = today.getDay();
@@ -72,8 +88,8 @@ export function useDashboardData(): DashboardData {
       recettesJour,
       depensesJour,
       recettesSemaine,
-      recentRecettes: (recentRecRes.data as unknown[]) || [],
-      recentDepenses: (recentDepRes.data as unknown[]) || [],
+      recentRecettes: ((recentRecRes.data as RecentRecette[] | null) ?? []),
+      recentDepenses: ((recentDepRes.data as RecentDepense[] | null) ?? []),
       loading: false,
     });
   }, []);
