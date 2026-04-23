@@ -34,7 +34,7 @@ function ResetPasswordPage() {
       if (error) throw error;
       navigate({ to: "/" });
     } catch (err: unknown) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
       setLoading(false);
     }

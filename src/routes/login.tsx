@@ -46,7 +46,7 @@ function LoginPage() {
         setSuccess("Un email de réinitialisation a été envoyé.");
       }
     } catch (err: unknown) {
-      setError(err.message || "Une erreur est survenue");
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
       setLoading(false);
     }
