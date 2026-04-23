@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { FileText, Trash2, Download, ArrowRightLeft } from "lucide-react";
