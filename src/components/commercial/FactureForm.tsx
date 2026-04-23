@@ -25,7 +25,9 @@ export function FactureForm({ clients, onSubmit, isPending, nextNumero }: Props)
     const updated = [...lignes];
     if (field === "description") updated[i].description = value;
     else {
-      (updated[i] as unknown)[field] = parseFloat(value) || 0;
+      if (field === "quantite" || field === "prix_unitaire" || field === "montant") {
+        updated[i][field] = parseFloat(value) || 0;
+      }
       updated[i].montant = updated[i].quantite * updated[i].prix_unitaire;
     }
     setLignes(updated);

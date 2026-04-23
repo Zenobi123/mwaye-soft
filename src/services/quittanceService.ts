@@ -78,7 +78,7 @@ export function exportQuittancePDF(q: QuittancePDFData) {
   });
 
   // Statut & paiement
-  const finalY = (doc as unknown).lastAutoTable.finalY + 10;
+  const finalY = (doc as any).lastAutoTable.finalY + 10;
   doc.setFontSize(10);
   doc.setFont("helvetica", "bold");
   doc.text("Statut :", 14, finalY);
