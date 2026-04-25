@@ -29,6 +29,7 @@ import { AuditLogTable } from "@/components/parametres/AuditLogTable";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteUser } from "@/server/deleteUser.functions";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/parametres")({
   component: ParametresPage,
