@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch } from "lucide-react";
+import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,7 @@ import { SettingsForm } from "@/components/parametres/SettingsForm";
 import { AuditLogTable } from "@/components/parametres/AuditLogTable";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteUser } from "@/server/deleteUser.functions";
+import { seedDefaultUsers } from "@/server/seedDefaultUsers.functions";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -47,7 +48,46 @@ function ParametresPage() {
   const { isAdmin } = useUserRoles();
   const [selectedRole, setSelectedRole] = useState<Record<string, string>>({});
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [seeding, setSeeding] = useState(false);
   const deleteUserFn = useServerFn(deleteUser);
+  const seedDefaultUsersFn = useServerFn(seedDefaultUsers);
+
+  const handleSeed = async () => {
+    setSeeding(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error("Session expirée, veuillez vous reconnecter");
+        return;
+      }
+      const res = await seedDefaultUsersFn({
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        toast.error(res.error);
+        return;
+      }
+      const created = res.results.filter((r) => r.status === "created").length;
+      const exists = res.results.filter((r) => r.status === "exists").length;
+      const errors = res.results.filter((r) => r.status === "error");
+      if (errors.length > 0) {
+        toast.warning(`${created} créés, ${exists} déjà présents, ${errors.length} erreurs`, {
+          description: errors.map((e) => `${e.email}: ${e.message}`).join(" • "),
+        });
+      } else {
+        toast.success(`${created} comptes créés, ${exists} déjà présents`, {
+          description: `Mot de passe par défaut : ${res.defaultPassword}`,
+          duration: 10000,
+        });
+      }
+      fetchUsers();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Échec de la création");
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const handleAssign = async (userId: string) => {
     const role = selectedRole[userId];
