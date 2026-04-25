@@ -1,17 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { BookOpen, Lock, Unlock, Loader2, Plus, Zap, FileText, Download } from "lucide-react";
+import { Lock, Unlock, Loader2, Plus, Zap, FileText, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { formatAmount } from "@/config/app";
-import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
+import { useJournalCaisseData } from "@/hooks/useJournalCaisseData";
 import { BackButton } from "@/components/layout/BackButton";
 import { exportJournalPDF, exportJournalExcel } from "@/services/exportService";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/journal-caisse")({
   component: JournalCaissePage,
@@ -23,110 +21,21 @@ export const Route = createFileRoute("/journal-caisse")({
   }),
 });
 
-interface JournalRow {
-  id: string;
-  date_journal: string;
-  solde_ouverture: number;
-  total_recettes: number;
-  total_depenses: number;
-  solde_cloture: number;
-  statut: string;
-  observations: string | null;
-}
-
 function JournalCaissePage() {
-  const { user, loading: authLoading } = useAuth();
-  const [journals, setJournals] = useState<JournalRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { journals, isLoading, ouvrirJournee, cloturerJournee, cloturerAujourdhui } = useJournalCaisseData();
   const [showNew, setShowNew] = useState(false);
-  const [creating, setCreating] = useState(false);
-  const [error, setError] = useState("");
 
-  const fetchJournals = useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from("journal_caisse")
-      .select("*")
-      .order("date_journal", { ascending: false })
-      .limit(30);
-    setJournals((data as JournalRow[]) || []);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (user) fetchJournals();
-  }, [user, fetchJournals]);
-
-  const handleOpenDay = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOpenDay = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setCreating(true);
-    setError("");
     const form = new FormData(e.currentTarget);
-    const { data: { user: u } } = await supabase.auth.getUser();
-    if (!u) { setError("Non connecté"); setCreating(false); return; }
-
-    const dateJournal = form.get("date_journal") as string;
-    const soldeOuverture = parseFloat(form.get("solde_ouverture") as string) || 0;
-
-    // Fetch today's recettes and depenses
-    const [recRes, depRes] = await Promise.all([
-      supabase.from("recettes").select("montant").eq("date_recette", dateJournal),
-      supabase.from("depenses").select("montant").eq("date_depense", dateJournal),
-    ]);
-
-    const totalRecettes = (recRes.data || []).reduce((s, r) => s + Number(r.montant), 0);
-    const totalDepenses = (depRes.data || []).reduce((s, d) => s + Number(d.montant), 0);
-
-    const { error: insertError } = await supabase.from("journal_caisse").insert({
-      user_id: u.id,
-      date_journal: dateJournal,
-      solde_ouverture: soldeOuverture,
-      total_recettes: totalRecettes,
-      total_depenses: totalDepenses,
-      solde_cloture: soldeOuverture + totalRecettes - totalDepenses,
-    });
-
-    if (insertError) {
-      setError(insertError.message.includes("unique") ? "Une entrée existe déjà pour cette date." : insertError.message);
-    } else {
-      setShowNew(false);
-      fetchJournals();
-    }
-    setCreating(false);
+    ouvrirJournee.mutate(
+      {
+        date_journal: form.get("date_journal") as string,
+        solde_ouverture: parseFloat(form.get("solde_ouverture") as string) || 0,
+      },
+      { onSuccess: () => setShowNew(false) },
+    );
   };
-
-  const handleClose = async (id: string) => {
-    const { data: { user: u } } = await supabase.auth.getUser();
-    await supabase.from("journal_caisse").update({
-      statut: "clôturé",
-      date_cloture: new Date().toISOString(),
-      cloture_par: u?.id,
-    }).eq("id", id);
-    fetchJournals();
-  };
-
-  const handleClotureAuto = async () => {
-    const today = new Date().toISOString().slice(0, 10);
-    const { error: rpcError } = await supabase.rpc("cloturer_journal_jour", { p_date: today });
-    if (rpcError) {
-      toast.error("Échec clôture", { description: rpcError.message });
-    } else {
-      toast.success("Journée clôturée automatiquement");
-      fetchJournals();
-    }
-  };
-
-  const handleExportPDF = () => {
-    exportJournalPDF(journals, "30 dernières journées");
-  };
-
-  const handleExportExcel = () => {
-    exportJournalExcel(journals, "30 dernières journées");
-  };
-
-  if (authLoading) {
-    return <AppLayout><div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div></AppLayout>;
-  }
 
   return (
     <AppLayout>
@@ -138,13 +47,28 @@ function JournalCaissePage() {
             <p className="text-sm text-muted-foreground mt-1">Suivi quotidien de la caisse</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <Button size="sm" variant="outline" onClick={handleExportPDF} disabled={journals.length === 0}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => exportJournalPDF(journals, "30 dernières journées")}
+              disabled={journals.length === 0}
+            >
               <FileText className="h-4 w-4 mr-1" /> PDF
             </Button>
-            <Button size="sm" variant="outline" onClick={handleExportExcel} disabled={journals.length === 0}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => exportJournalExcel(journals, "30 dernières journées")}
+              disabled={journals.length === 0}
+            >
               <Download className="h-4 w-4 mr-1" /> Excel
             </Button>
-            <Button size="sm" variant="secondary" onClick={handleClotureAuto}>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => cloturerAujourdhui.mutate()}
+              disabled={cloturerAujourdhui.isPending}
+            >
               <Zap className="h-4 w-4 mr-1" /> Clôture auto du jour
             </Button>
             <Button size="sm" onClick={() => setShowNew(true)}>
@@ -156,7 +80,6 @@ function JournalCaissePage() {
         {showNew && (
           <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
             <h3 className="text-sm font-semibold mb-3">Nouvelle journée de caisse</h3>
-            {error && <div className="mb-3 rounded-md bg-destructive/10 p-2 text-sm text-destructive">{error}</div>}
             <form onSubmit={handleOpenDay} className="flex flex-wrap items-end gap-3">
               <div className="space-y-1">
                 <Label htmlFor="date_journal">Date</Label>
@@ -166,8 +89,8 @@ function JournalCaissePage() {
                 <Label htmlFor="solde_ouverture">Solde d'ouverture (F CFA)</Label>
                 <Input id="solde_ouverture" name="solde_ouverture" type="number" step="1" defaultValue="0" />
               </div>
-              <Button type="submit" disabled={creating}>
-                {creating ? "Création..." : "Ouvrir la journée"}
+              <Button type="submit" disabled={ouvrirJournee.isPending}>
+                {ouvrirJournee.isPending ? "Création..." : "Ouvrir la journée"}
               </Button>
               <Button type="button" variant="outline" onClick={() => setShowNew(false)}>Annuler</Button>
             </form>
@@ -175,7 +98,7 @@ function JournalCaissePage() {
         )}
 
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
@@ -216,7 +139,12 @@ function JournalCaissePage() {
                     </td>
                     <td className="px-5 py-3.5 text-right">
                       {j.statut === "ouvert" && (
-                        <Button size="sm" variant="outline" onClick={() => handleClose(j.id)}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => cloturerJournee.mutate(j.id)}
+                          disabled={cloturerJournee.isPending}
+                        >
                           Clôturer
                         </Button>
                       )}

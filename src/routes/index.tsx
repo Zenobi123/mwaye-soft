@@ -29,7 +29,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Dashboard() {
-  const { recettesJour, depensesJour, recettesSemaine, recentRecettes, recentDepenses, loading } = useDashboardData();
+  const {
+    recettesJour,
+    depensesJour,
+    recettesSemaine,
+    recentRecettes,
+    recentDepenses,
+    facilities,
+    upcomingEvents,
+    loading,
+  } = useDashboardData();
   const { masseSalarialeMois } = usePaie();
   const { enCours } = useConges();
   const benefice = recettesJour - depensesJour;
@@ -94,13 +103,13 @@ function Dashboard() {
                 <RevenueChart data={recettesSemaine} />
               </div>
               <div className="lg:col-span-2">
-                <FacilityStatus />
+                <FacilityStatus facilities={facilities} />
               </div>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
               <RecentTransactions recettes={recentRecettes} depenses={recentDepenses} />
-              <UpcomingEvents />
+              <UpcomingEvents events={upcomingEvents} />
             </div>
           </>
         )}
