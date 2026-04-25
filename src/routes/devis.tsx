@@ -51,6 +51,7 @@ function DevisPage() {
       client_adresse: d.clients?.adresse,
       client_telephone: d.clients?.telephone,
       client_email: d.clients?.email,
+      client_niu: d.clients?.niu,
       lignes: (d.lignes_document ?? []).sort((a: unknown, b: unknown) => a.ordre - b.ordre).map((l: unknown) => ({
         description: l.description, quantite: Number(l.quantite),
         prix_unitaire: Number(l.prix_unitaire), montant: Number(l.montant),
@@ -58,6 +59,15 @@ function DevisPage() {
       montant_total: Number(d.montant_total),
       tva_rate: Number(settings?.tva_rate ?? 0),
       notes: d.notes,
+      societe: {
+        nom: settings.complex_name,
+        niu: settings.niu,
+        rccm: settings.rccm,
+        adresse: settings.adresse,
+        telephone: settings.telephone,
+        email: settings.email_societe,
+        regime_fiscal: settings.regime_fiscal,
+      },
     });
   };
 

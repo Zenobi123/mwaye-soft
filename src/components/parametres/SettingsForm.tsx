@@ -39,6 +39,20 @@ export function SettingsForm() {
       cnps_employee_rate: Number(draft.cnps_employee_rate),
       cnps_employer_rate: Number(draft.cnps_employer_rate),
       notification_email: draft.notification_email,
+      // Identité fiscale
+      niu: draft.niu,
+      rccm: draft.rccm,
+      adresse: draft.adresse,
+      telephone: draft.telephone,
+      email_societe: draft.email_societe,
+      regime_fiscal: draft.regime_fiscal,
+      // Cotisations Cameroun
+      secteur_at: draft.secteur_at,
+      taux_at: Number(draft.taux_at),
+      taux_cfc_emp: Number(draft.taux_cfc_emp),
+      taux_cfc_pat: Number(draft.taux_cfc_pat),
+      taux_fne: Number(draft.taux_fne),
+      plafond_cnps: Number(draft.plafond_cnps),
     });
     setSaving(false);
   };
@@ -71,6 +85,67 @@ export function SettingsForm() {
       </section>
 
       <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-4">
+        <h3 className="text-sm font-semibold text-card-foreground">
+          Identité fiscale (mentions obligatoires factures — Cameroun / OHADA)
+        </h3>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="NIU (Numéro d'Identifiant Unique DGI) *">
+            <Input
+              value={draft.niu ?? ""}
+              disabled={disabled}
+              placeholder="P012345678901A"
+              onChange={(e) => update("niu", e.target.value || null)}
+            />
+          </Field>
+          <Field label="RCCM (Registre du Commerce) *">
+            <Input
+              value={draft.rccm ?? ""}
+              disabled={disabled}
+              placeholder="RC/DLA/2026/B/12345"
+              onChange={(e) => update("rccm", e.target.value || null)}
+            />
+          </Field>
+          <Field label="Adresse complète du siège *">
+            <Input
+              value={draft.adresse ?? ""}
+              disabled={disabled}
+              placeholder="BP 1234, Quartier Bonapriso, Douala"
+              onChange={(e) => update("adresse", e.target.value || null)}
+            />
+          </Field>
+          <Field label="Téléphone">
+            <Input
+              value={draft.telephone ?? ""}
+              disabled={disabled}
+              placeholder="+237 6XX XX XX XX"
+              onChange={(e) => update("telephone", e.target.value || null)}
+            />
+          </Field>
+          <Field label="Email société">
+            <Input
+              type="email"
+              value={draft.email_societe ?? ""}
+              disabled={disabled}
+              placeholder="contact@mwayehouse.cm"
+              onChange={(e) => update("email_societe", e.target.value || null)}
+            />
+          </Field>
+          <Field label="Régime fiscal">
+            <select
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+              value={draft.regime_fiscal}
+              disabled={disabled}
+              onChange={(e) => update("regime_fiscal", e.target.value)}
+            >
+              <option value="reel">Réel</option>
+              <option value="simplifie">Simplifié</option>
+              <option value="non_assujetti">Non assujetti TVA</option>
+            </select>
+          </Field>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-4">
         <h3 className="text-sm font-semibold text-card-foreground">Paramètres financiers</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="TVA (%)">
@@ -79,11 +154,50 @@ export function SettingsForm() {
           <Field label="Pénalité retard loyer (% / mois)">
             <Input type="number" step="0.01" value={draft.late_fee_rate} disabled={disabled} onChange={(e) => update("late_fee_rate", Number(e.target.value))} />
           </Field>
-          <Field label="CNPS — part salarié (%)">
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-4">
+        <h3 className="text-sm font-semibold text-card-foreground">
+          Cotisations sociales et fiscales (Cameroun)
+        </h3>
+        <p className="text-xs text-muted-foreground">
+          IRPP (barème progressif), RAV et TDL sont calculés automatiquement selon les barèmes
+          officiels DGI Cameroun. Ne pas modifier sauf changement réglementaire.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field label="CNPS PVID — salarié (%)">
             <Input type="number" step="0.01" value={draft.cnps_employee_rate} disabled={disabled} onChange={(e) => update("cnps_employee_rate", Number(e.target.value))} />
           </Field>
-          <Field label="CNPS — part employeur (%)">
+          <Field label="CNPS — employeur global (%)">
             <Input type="number" step="0.01" value={draft.cnps_employer_rate} disabled={disabled} onChange={(e) => update("cnps_employer_rate", Number(e.target.value))} />
+          </Field>
+          <Field label="Plafond CNPS mensuel (FCFA)">
+            <Input type="number" value={draft.plafond_cnps} disabled={disabled} onChange={(e) => update("plafond_cnps", Number(e.target.value))} />
+          </Field>
+          <Field label="Secteur Accidents du Travail">
+            <select
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+              value={draft.secteur_at}
+              disabled={disabled}
+              onChange={(e) => update("secteur_at", e.target.value)}
+            >
+              <option value="A">A — Risque faible (1,75 %)</option>
+              <option value="B">B — Risque moyen (2,5 %)</option>
+              <option value="C">C — Risque élevé (5 %)</option>
+            </select>
+          </Field>
+          <Field label="Taux AT appliqué (%)">
+            <Input type="number" step="0.01" value={draft.taux_at} disabled={disabled} onChange={(e) => update("taux_at", Number(e.target.value))} />
+          </Field>
+          <Field label="CFC — salarié (%)">
+            <Input type="number" step="0.01" value={draft.taux_cfc_emp} disabled={disabled} onChange={(e) => update("taux_cfc_emp", Number(e.target.value))} />
+          </Field>
+          <Field label="CFC — employeur (%)">
+            <Input type="number" step="0.01" value={draft.taux_cfc_pat} disabled={disabled} onChange={(e) => update("taux_cfc_pat", Number(e.target.value))} />
+          </Field>
+          <Field label="FNE — employeur (%)">
+            <Input type="number" step="0.01" value={draft.taux_fne} disabled={disabled} onChange={(e) => update("taux_fne", Number(e.target.value))} />
           </Field>
         </div>
       </section>

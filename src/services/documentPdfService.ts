@@ -9,6 +9,16 @@ export interface LigneDoc {
   montant: number;
 }
 
+export interface SocieteIdentite {
+  nom: string;
+  niu?: string | null;
+  rccm?: string | null;
+  adresse?: string | null;
+  telephone?: string | null;
+  email?: string | null;
+  regime_fiscal?: string;
+}
+
 export interface DocumentPDFData {
   type: "DEVIS" | "FACTURE";
   numero: string;
@@ -18,6 +28,7 @@ export interface DocumentPDFData {
   client_adresse?: string | null;
   client_telephone?: string | null;
   client_email?: string | null;
+  client_niu?: string | null;
   lignes: LigneDoc[];
   montant_total: number;
   tva_rate?: number;
@@ -25,6 +36,7 @@ export interface DocumentPDFData {
   statut?: string;
   mode_paiement?: string | null;
   date_paiement?: string | null;
+  societe: SocieteIdentite;
 }
 
 function fmtDate(d?: string | null) {
@@ -34,18 +46,30 @@ function fmtDate(d?: string | null) {
 export function exportDocumentPDF(doc_data: DocumentPDFData) {
   const pdf = new jsPDF();
   const isFacture = doc_data.type === "FACTURE";
+  const s = doc_data.societe;
+  const tvaRate = doc_data.tva_rate ?? 0;
+  const tvaApplicable = tvaRate > 0;
+  const regime = s.regime_fiscal ?? "reel";
 
-  // En-tête société
-  pdf.setFontSize(18);
+  // ========== En-tête société ==========
+  pdf.setFontSize(16);
   pdf.setFont("helvetica", "bold");
-  pdf.text("MWAYE HOUSE", 14, 20);
-  pdf.setFontSize(9);
+  pdf.text(s.nom, 14, 18);
+  pdf.setFontSize(8);
   pdf.setFont("helvetica", "normal");
-  pdf.setTextColor(120);
-  pdf.text("Complexe résidentiel et commercial — Cameroun", 14, 26);
+  pdf.setTextColor(100);
+  let y = 23;
+  if (s.adresse)   { pdf.text(s.adresse, 14, y);   y += 4; }
+  const contactSoc = [s.telephone, s.email].filter(Boolean).join(" — ");
+  if (contactSoc)  { pdf.text(contactSoc, 14, y);  y += 4; }
+  const ids = [
+    s.niu  ? `NIU : ${s.niu}`   : null,
+    s.rccm ? `RCCM : ${s.rccm}` : null,
+  ].filter(Boolean).join(" — ");
+  if (ids)         { pdf.text(ids, 14, y);         y += 4; }
   pdf.setTextColor(0);
 
-  // Titre + numéro
+  // ========== Titre + numéro ==========
   pdf.setFontSize(16);
   pdf.setFont("helvetica", "bold");
   pdf.text(doc_data.type, 196, 22, { align: "right" });
@@ -60,27 +84,29 @@ export function exportDocumentPDF(doc_data: DocumentPDFData) {
     );
   }
 
-  // Encadré client
+  // ========== Encadré client ==========
+  const yClient = Math.max(y, 44) + 4;
   pdf.setDrawColor(200);
-  pdf.rect(14, 50, 182, 26);
+  pdf.rect(14, yClient, 182, 32);
   pdf.setFontSize(9);
   pdf.setFont("helvetica", "bold");
-  pdf.text("FACTURÉ À", 18, 57);
+  pdf.text("FACTURÉ À", 18, yClient + 6);
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
-  pdf.text(doc_data.client_nom, 18, 64);
+  pdf.text(doc_data.client_nom, 18, yClient + 13);
   pdf.setFontSize(9);
   pdf.setTextColor(100);
-  let yc = 70;
+  let yc = yClient + 19;
   if (doc_data.client_adresse) { pdf.text(doc_data.client_adresse, 18, yc); yc += 4; }
-  const contact = [doc_data.client_telephone, doc_data.client_email].filter(Boolean).join(" • ");
-  if (contact) pdf.text(contact, 18, yc);
+  const contactCli = [doc_data.client_telephone, doc_data.client_email].filter(Boolean).join(" — ");
+  if (contactCli) { pdf.text(contactCli, 18, yc); yc += 4; }
+  if (doc_data.client_niu) { pdf.text(`NIU client : ${doc_data.client_niu}`, 18, yc); }
   pdf.setTextColor(0);
 
-  // Tableau lignes
+  // ========== Tableau lignes ==========
   autoTable(pdf, {
-    startY: 84,
-    head: [["Description", "Qté", "P.U.", "Montant"]],
+    startY: yClient + 38,
+    head: [["Description", "Qté", "P.U.", "Montant HT"]],
     body: doc_data.lignes.map((l) => [
       l.description,
       l.quantite.toString(),
@@ -94,30 +120,30 @@ export function exportDocumentPDF(doc_data: DocumentPDFData) {
       3: { halign: "right", cellWidth: 38 },
     },
     margin: { left: 14, right: 14 },
+    styles: { fontSize: 9 },
   });
 
-  // Totaux
-  const finalY = (pdf as any).lastAutoTable.finalY + 6;
+  // ========== Totaux ==========
+  const finalY = (pdf as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6;
   const ht = doc_data.montant_total;
-  const tvaRate = doc_data.tva_rate ?? 0;
-  const tva = Math.round(ht * tvaRate / 100);
+  const tva = Math.round((ht * tvaRate) / 100);
   const ttc = ht + tva;
 
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
   pdf.text("Total HT :", 140, finalY);
   pdf.text(formatAmount(ht), 196, finalY, { align: "right" });
-  if (tvaRate > 0) {
+  if (tvaApplicable) {
     pdf.text(`TVA (${tvaRate}%) :`, 140, finalY + 6);
     pdf.text(formatAmount(tva), 196, finalY + 6, { align: "right" });
   }
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(12);
-  pdf.text("TOTAL TTC :", 140, finalY + (tvaRate > 0 ? 14 : 8));
-  pdf.text(formatAmount(ttc), 196, finalY + (tvaRate > 0 ? 14 : 8), { align: "right" });
+  pdf.text("TOTAL TTC :", 140, finalY + (tvaApplicable ? 14 : 8));
+  pdf.text(formatAmount(ttc), 196, finalY + (tvaApplicable ? 14 : 8), { align: "right" });
 
-  // Statut paiement (facture)
-  let yInfo = finalY + (tvaRate > 0 ? 26 : 20);
+  // ========== Statut paiement ==========
+  let yInfo = finalY + (tvaApplicable ? 26 : 20);
   if (isFacture && doc_data.statut) {
     pdf.setFontSize(10);
     pdf.setFont("helvetica", "bold");
@@ -127,17 +153,20 @@ export function exportDocumentPDF(doc_data: DocumentPDFData) {
                         doc_data.statut.toUpperCase();
     const color: [number, number, number] = doc_data.statut === "payee" ? [22, 163, 74] :
                                              doc_data.statut === "en_retard" ? [220, 80, 50] : [180, 140, 60];
-    pdf.setTextColor(...color);
+    pdf.setTextColor(color[0], color[1], color[2]);
     pdf.text(`Statut : ${statutLabel}`, 14, yInfo);
     pdf.setTextColor(0);
     if (doc_data.statut === "payee" && doc_data.date_paiement) {
       pdf.setFont("helvetica", "normal");
-      pdf.text(`Payée le ${fmtDate(doc_data.date_paiement)}${doc_data.mode_paiement ? ` par ${doc_data.mode_paiement}` : ""}`, 14, yInfo + 6);
+      pdf.text(
+        `Payée le ${fmtDate(doc_data.date_paiement)}${doc_data.mode_paiement ? ` par ${doc_data.mode_paiement}` : ""}`,
+        14, yInfo + 6,
+      );
     }
     yInfo += 14;
   }
 
-  // Notes
+  // ========== Notes ==========
   if (doc_data.notes) {
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(9);
@@ -145,23 +174,38 @@ export function exportDocumentPDF(doc_data: DocumentPDFData) {
     pdf.setFont("helvetica", "normal");
     const lines = pdf.splitTextToSize(doc_data.notes, 180);
     pdf.text(lines, 14, yInfo + 5);
+    yInfo += 5 + (lines.length as number) * 4;
   }
 
-  // Mentions légales / pied de page
+  // ========== Mentions légales ==========
   pdf.setFontSize(8);
   pdf.setTextColor(120);
+  const yMentions = 270;
+
   if (isFacture) {
+    if (regime === "non_assujetti") {
+      pdf.text("TVA non applicable — art. 128 du CGI Cameroun.", 105, yMentions, { align: "center" });
+    } else if (tvaApplicable) {
+      pdf.text(
+        "TVA appliquée conformément aux articles 125 et s. du CGI Cameroun.",
+        105, yMentions, { align: "center" },
+      );
+    }
     pdf.text(
-      "TVA non applicable selon régime en vigueur — Pénalité de retard : taux légal en cas de non-paiement à échéance.",
-      105, 278, { align: "center" }
+      "Pénalité de retard : 1 % par mois (CGI art. L96). Escompte pour paiement anticipé : néant.",
+      105, yMentions + 5, { align: "center" },
     );
   } else {
     pdf.text(
-      "Devis valable selon la date indiquée — Acceptation requise pour conversion en facture.",
-      105, 278, { align: "center" }
+      "Devis valable jusqu'à la date indiquée — Acceptation requise pour conversion en facture.",
+      105, yMentions, { align: "center" },
+    );
+    pdf.text(
+      "Document non engageant tant qu'il n'est pas accepté et signé par le client.",
+      105, yMentions + 5, { align: "center" },
     );
   }
-  pdf.text("MWAYE HOUSE — Document généré automatiquement", 105, 285, { align: "center" });
+  pdf.text(`${s.nom} — Document généré le ${new Date().toLocaleString("fr-FR")}`, 105, yMentions + 12, { align: "center" });
 
   pdf.save(`${doc_data.type.toLowerCase()}_${doc_data.numero}.pdf`);
 }

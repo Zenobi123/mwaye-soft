@@ -79,6 +79,7 @@ function FacturesPage() {
       client_adresse: f.clients?.adresse,
       client_telephone: f.clients?.telephone,
       client_email: f.clients?.email,
+      client_niu: f.clients?.niu,
       lignes: (f.lignes_document ?? []).sort((a: unknown, b: unknown) => a.ordre - b.ordre).map((l: unknown) => ({
         description: l.description, quantite: Number(l.quantite),
         prix_unitaire: Number(l.prix_unitaire), montant: Number(l.montant),
@@ -89,6 +90,15 @@ function FacturesPage() {
       statut: f.statut,
       date_paiement: f.date_paiement,
       mode_paiement: undefined,
+      societe: {
+        nom: settings.complex_name,
+        niu: settings.niu,
+        rccm: settings.rccm,
+        adresse: settings.adresse,
+        telephone: settings.telephone,
+        email: settings.email_societe,
+        regime_fiscal: settings.regime_fiscal,
+      },
     });
   };
 

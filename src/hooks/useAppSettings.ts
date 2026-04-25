@@ -16,6 +16,20 @@ export interface AppSettings {
   cnps_employee_rate: number;
   cnps_employer_rate: number;
   notification_email: string | null;
+  // Identité fiscale (Cameroun / OHADA)
+  niu: string | null;
+  rccm: string | null;
+  adresse: string | null;
+  telephone: string | null;
+  email_societe: string | null;
+  regime_fiscal: string;
+  // Cotisations Cameroun complètes
+  secteur_at: string;
+  taux_at: number;
+  taux_cfc_emp: number;
+  taux_cfc_pat: number;
+  taux_fne: number;
+  plafond_cnps: number;
 }
 
 const DEFAULTS: AppSettings = {
@@ -31,6 +45,18 @@ const DEFAULTS: AppSettings = {
   cnps_employee_rate: 4.2,
   cnps_employer_rate: 11.2,
   notification_email: null,
+  niu: null,
+  rccm: null,
+  adresse: null,
+  telephone: null,
+  email_societe: null,
+  regime_fiscal: "reel",
+  secteur_at: "B",
+  taux_at: 2.5,
+  taux_cfc_emp: 1.0,
+  taux_cfc_pat: 1.5,
+  taux_fne: 1.0,
+  plafond_cnps: 750000,
 };
 
 export function useAppSettings() {
@@ -44,7 +70,7 @@ export function useAppSettings() {
       .select("*")
       .limit(1)
       .maybeSingle();
-    if (!error && data) setSettings(data as AppSettings);
+    if (!error && data) setSettings({ ...DEFAULTS, ...(data as Partial<AppSettings>) });
     setLoading(false);
   }, []);
 
