@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserPlus, Loader2, Mail, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { inviteUser } from "@/server/inviteUser.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 const ROLE_OPTIONS: Array<{ value: "admin" | "directeur" | "comptable" | "resp_sport" | "resp_evenement" | "resp_immobilier" | "caissier"; label: string }> = [
   { value: "admin", label: "Administrateur" },
