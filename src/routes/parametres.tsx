@@ -29,6 +29,7 @@ import { AuditLogTable } from "@/components/parametres/AuditLogTable";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteUser } from "@/server/deleteUser.functions";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/parametres")({
   component: ParametresPage,
@@ -58,7 +59,16 @@ function ParametresPage() {
   const handleDelete = async (userId: string, name: string) => {
     setDeletingId(userId);
     try {
-      const res = await deleteUserFn({ data: { user_id: userId } });
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error("Session expirée, veuillez vous reconnecter");
+        return;
+      }
+      const res = await deleteUserFn({
+        data: { user_id: userId },
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (res.ok) {
         toast.success(`${name || "Utilisateur"} supprimé`);
         fetchUsers();
@@ -66,7 +76,8 @@ function ParametresPage() {
         toast.error(res.error);
       }
     } catch (e: unknown) {
-      toast.error(e?.message ?? "Échec de la suppression");
+      const msg = e instanceof Error ? e.message : "Échec de la suppression";
+      toast.error(msg);
     } finally {
       setDeletingId(null);
     }

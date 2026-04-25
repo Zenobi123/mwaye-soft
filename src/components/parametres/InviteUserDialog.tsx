@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserPlus, Loader2, Mail, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { inviteUser } from "@/server/inviteUser.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 const ROLE_OPTIONS: Array<{ value: "admin" | "directeur" | "comptable" | "resp_sport" | "resp_evenement" | "resp_immobilier" | "caissier"; label: string }> = [
   { value: "admin", label: "Administrateur" },
@@ -51,8 +52,15 @@ export function InviteUserDialog({ onCreated }: Props) {
     }
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error("Session expirée, veuillez vous reconnecter");
+        return;
+      }
       const res = await callInvite({
         data: { email, full_name: fullName, role, mode, password: mode === "password" ? password : undefined },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
         toast.error(res.error);
