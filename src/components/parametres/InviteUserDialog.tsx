@@ -52,8 +52,15 @@ export function InviteUserDialog({ onCreated }: Props) {
     }
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error("Session expirée, veuillez vous reconnecter");
+        return;
+      }
       const res = await callInvite({
         data: { email, full_name: fullName, role, mode, password: mode === "password" ? password : undefined },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
         toast.error(res.error);
