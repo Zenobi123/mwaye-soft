@@ -1,6 +1,11 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Outlet, Link, createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+
+interface RouterContext {
+  queryClient: QueryClient;
+}
 
 function NotFoundComponent() {
   return (
@@ -26,7 +31,7 @@ function NotFoundComponent() {
   );
 }
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -35,10 +40,14 @@ export const Route = createRootRoute({
       { name: "description", content: "Plateforme de gestion commerciale du complexe MWAYE HOUSE : sport, événementiel et location" },
       { name: "author", content: "MWAYE HOUSE" },
       { property: "og:title", content: "MWAYE HOUSE — Gestion Commerciale" },
-      { property: "og:description", content: "Plateforme de gestion commerciale du complexe MWAYE HOUSE" },
+      { property: "og:description", content: "Plateforme de gestion commerciale du complexe MWAYE HOUSE : sport, événementiel et location" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "MWAYE HOUSE — Gestion Commerciale" },
+      { name: "twitter:description", content: "Plateforme de gestion commerciale du complexe MWAYE HOUSE : sport, événementiel et location" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a64e1c0-5910-4bdf-a20f-3f448cc90d3c/id-preview-49ab0041--4d930a60-60cd-4077-b580-e29e3a8f9031.lovable.app-1776842636588.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a64e1c0-5910-4bdf-a20f-3f448cc90d3c/id-preview-49ab0041--4d930a60-60cd-4077-b580-e29e3a8f9031.lovable.app-1776842636588.png" },
     ],
     links: [
       {
@@ -67,5 +76,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  const { queryClient } = Route.useRouteContext();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  );
 }

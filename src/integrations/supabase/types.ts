@@ -174,12 +174,14 @@ export type Database = {
           emplacement: string | null
           id: string
           nom: string
+          pmp: number
           prix_unitaire: number
           quantite: number
           quantite_min: number
           unite: string
           updated_at: string
           user_id: string
+          valeur_stock: number
         }
         Insert: {
           categorie?: string
@@ -188,12 +190,14 @@ export type Database = {
           emplacement?: string | null
           id?: string
           nom: string
+          pmp?: number
           prix_unitaire?: number
           quantite?: number
           quantite_min?: number
           unite?: string
           updated_at?: string
           user_id: string
+          valeur_stock?: number
         }
         Update: {
           categorie?: string
@@ -202,12 +206,14 @@ export type Database = {
           emplacement?: string | null
           id?: string
           nom?: string
+          pmp?: number
           prix_unitaire?: number
           quantite?: number
           quantite_min?: number
           unite?: string
           updated_at?: string
           user_id?: string
+          valeur_stock?: number
         }
         Relationships: []
       }
@@ -750,11 +756,16 @@ export type Database = {
           created_at: string
           date_echeance: string | null
           date_facture: string
+          date_paiement: string | null
+          date_relance: string | null
           devis_id: string | null
           id: string
           montant_total: number
+          niveau_relance: number
           notes: string | null
+          notes_relance: string | null
           numero: string
+          recette_id: string | null
           statut: string
           updated_at: string
           user_id: string
@@ -764,11 +775,16 @@ export type Database = {
           created_at?: string
           date_echeance?: string | null
           date_facture?: string
+          date_paiement?: string | null
+          date_relance?: string | null
           devis_id?: string | null
           id?: string
           montant_total?: number
+          niveau_relance?: number
           notes?: string | null
+          notes_relance?: string | null
           numero: string
+          recette_id?: string | null
           statut?: string
           updated_at?: string
           user_id: string
@@ -778,11 +794,16 @@ export type Database = {
           created_at?: string
           date_echeance?: string | null
           date_facture?: string
+          date_paiement?: string | null
+          date_relance?: string | null
           devis_id?: string | null
           id?: string
           montant_total?: number
+          niveau_relance?: number
           notes?: string | null
+          notes_relance?: string | null
           numero?: string
+          recette_id?: string | null
           statut?: string
           updated_at?: string
           user_id?: string
@@ -896,6 +917,102 @@ export type Database = {
         }
         Relationships: []
       }
+      inventaire_lignes: {
+        Row: {
+          article_id: string
+          created_at: string
+          ecart: number
+          id: string
+          inventaire_id: string
+          notes: string | null
+          quantite_physique: number
+          quantite_theorique: number
+          user_id: string
+          valeur_ecart: number
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          ecart?: number
+          id?: string
+          inventaire_id: string
+          notes?: string | null
+          quantite_physique?: number
+          quantite_theorique?: number
+          user_id: string
+          valeur_ecart?: number
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          ecart?: number
+          id?: string
+          inventaire_id?: string
+          notes?: string | null
+          quantite_physique?: number
+          quantite_theorique?: number
+          user_id?: string
+          valeur_ecart?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventaire_lignes_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles_stock"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventaire_lignes_inventaire_id_fkey"
+            columns: ["inventaire_id"]
+            isOneToOne: false
+            referencedRelation: "inventaires"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventaires: {
+        Row: {
+          created_at: string
+          date_inventaire: string
+          ecart_total_valeur: number
+          id: string
+          observations: string | null
+          reference: string
+          statut: string
+          updated_at: string
+          user_id: string
+          valide_le: string | null
+          valide_par: string | null
+        }
+        Insert: {
+          created_at?: string
+          date_inventaire?: string
+          ecart_total_valeur?: number
+          id?: string
+          observations?: string | null
+          reference: string
+          statut?: string
+          updated_at?: string
+          user_id: string
+          valide_le?: string | null
+          valide_par?: string | null
+        }
+        Update: {
+          created_at?: string
+          date_inventaire?: string
+          ecart_total_valeur?: number
+          id?: string
+          observations?: string | null
+          reference?: string
+          statut?: string
+          updated_at?: string
+          user_id?: string
+          valide_le?: string | null
+          valide_par?: string | null
+        }
+        Relationships: []
+      }
       journal_caisse: {
         Row: {
           cloture_auto: boolean
@@ -1001,36 +1118,104 @@ export type Database = {
           },
         ]
       }
-      mouvements_stock: {
+      lots_stock: {
         Row: {
           article_id: string
           created_at: string
-          date_mouvement: string
+          date_entree: string
+          depense_id: string | null
+          fournisseur: string | null
           id: string
-          motif: string | null
-          quantite: number
-          type_mouvement: string
+          prix_unitaire: number
+          quantite_initiale: number
+          quantite_restante: number
+          reference_achat: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
           article_id: string
           created_at?: string
-          date_mouvement?: string
+          date_entree?: string
+          depense_id?: string | null
+          fournisseur?: string | null
           id?: string
-          motif?: string | null
-          quantite?: number
-          type_mouvement?: string
+          prix_unitaire?: number
+          quantite_initiale?: number
+          quantite_restante?: number
+          reference_achat?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
           article_id?: string
           created_at?: string
-          date_mouvement?: string
+          date_entree?: string
+          depense_id?: string | null
+          fournisseur?: string | null
           id?: string
+          prix_unitaire?: number
+          quantite_initiale?: number
+          quantite_restante?: number
+          reference_achat?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lots_stock_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles_stock"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mouvements_stock: {
+        Row: {
+          article_id: string
+          created_at: string
+          date_mouvement: string
+          depense_id: string | null
+          fournisseur: string | null
+          id: string
+          lot_id: string | null
+          motif: string | null
+          prix_unitaire: number
+          quantite: number
+          type_mouvement: string
+          user_id: string
+          valeur_mouvement: number
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          date_mouvement?: string
+          depense_id?: string | null
+          fournisseur?: string | null
+          id?: string
+          lot_id?: string | null
           motif?: string | null
+          prix_unitaire?: number
+          quantite?: number
+          type_mouvement?: string
+          user_id: string
+          valeur_mouvement?: number
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          date_mouvement?: string
+          depense_id?: string | null
+          fournisseur?: string | null
+          id?: string
+          lot_id?: string | null
+          motif?: string | null
+          prix_unitaire?: number
           quantite?: number
           type_mouvement?: string
           user_id?: string
+          valeur_mouvement?: number
         }
         Relationships: [
           {
@@ -1541,6 +1726,14 @@ export type Database = {
       appliquer_penalites_retard: { Args: never; Returns: number }
       calculer_bilan_mensuel: { Args: { p_mois: string }; Returns: string }
       cloturer_journal_jour: { Args: { p_date: string }; Returns: string }
+      consommer_stock_fifo: {
+        Args: { p_article_id: string; p_quantite: number }
+        Returns: number
+      }
+      convertir_devis_en_facture: {
+        Args: { p_date_echeance?: string; p_devis_id: string }
+        Returns: string
+      }
       generer_bulletins_mensuels: { Args: { p_mois: string }; Returns: number }
       generer_quittances_mensuelles: {
         Args: { p_mois: string }
@@ -1554,10 +1747,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      marquer_facture_payee: {
+        Args: { p_facture_id: string; p_mode_paiement?: string }
+        Returns: string
+      }
+      marquer_factures_en_retard: { Args: never; Returns: number }
       valider_bulletin_et_creer_depense: {
         Args: { p_bulletin_id: string }
         Returns: string
       }
+      valider_inventaire: { Args: { p_inventaire_id: string }; Returns: number }
+      valoriser_article: { Args: { p_article_id: string }; Returns: undefined }
     }
     Enums: {
       app_role:

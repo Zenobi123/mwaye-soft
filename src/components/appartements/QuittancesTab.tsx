@@ -12,17 +12,32 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+interface QuittanceRow {
+  id: string;
+  numero: string;
+  mois_concerne: string;
+  date_echeance: string | null;
+  loyer_base: number | string | null;
+  penalite: number | string | null;
+  montant_total: number | string | null;
+  statut: string;
+  date_paiement: string | null;
+  mode_paiement: string | null;
+  contrats_bail?: { locataire: string | null } | null;
+  appartements?: { numero: string | null; type_appartement: string | null } | null;
+}
+
 export function QuittancesTab() {
   const { quittances, totalImpaye, nbImpayes, genererMois, marquerPayee, lancerPenalitesRappels } = useImmobilier();
   const [paiementId, setPaiementId] = useState<string | null>(null);
   const [mode, setMode] = useState("Espèces");
   const [moisCible, setMoisCible] = useState(new Date().toISOString().slice(0, 7));
 
-  const downloadPDF = (q: any) => {
+  const downloadPDF = (q: QuittanceRow) => {
     exportQuittancePDF({
       numero: q.numero,
       mois_concerne: q.mois_concerne,
-      date_echeance: q.date_echeance,
+      date_echeance: q.date_echeance ?? "",
       loyer_base: Number(q.loyer_base),
       penalite: Number(q.penalite),
       montant_total: Number(q.montant_total),
@@ -89,7 +104,7 @@ export function QuittancesTab() {
           <tbody className="divide-y divide-border">
             {quittances.length === 0 ? (
               <tr><td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">Aucune quittance. Cliquez "Générer" pour créer celles du mois.</td></tr>
-            ) : quittances.map((q: any) => (
+            ) : quittances.map((q: QuittanceRow) => (
               <tr key={q.id} className="hover:bg-muted/30">
                 <td className="px-4 py-3 font-mono text-xs">{q.numero}</td>
                 <td className="px-4 py-3">

@@ -39,14 +39,14 @@ function LoginPage() {
         navigate({ to: "/" });
       } else if (mode === "register") {
         await signUp(email, password, fullName);
-        setSuccess("Compte créé ! Vérifiez votre email pour confirmer votre inscription.");
-        setMode("login");
+        // Auto-confirm activé : l'utilisateur est connecté immédiatement
+        navigate({ to: "/" });
       } else {
         await resetPassword(email);
         setSuccess("Un email de réinitialisation a été envoyé.");
       }
-    } catch (err: any) {
-      setError(err.message || "Une erreur est survenue");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
       setLoading(false);
     }

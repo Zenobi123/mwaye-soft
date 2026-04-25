@@ -18,12 +18,28 @@ export interface UpcomingEventItem {
   status: string;
 }
 
+interface RecentRecette {
+  id: string;
+  libelle: string;
+  montant: number;
+  date_recette: string;
+  categorie: string;
+}
+
+interface RecentDepense {
+  id: string;
+  libelle: string;
+  montant: number;
+  date_depense: string;
+  categorie: string;
+}
+
 interface DashboardData {
   recettesJour: number;
   depensesJour: number;
   recettesSemaine: { name: string; recettes: number; depenses: number }[];
-  recentRecettes: { id: string; libelle: string; montant: number; date_recette: string; categorie: string }[];
-  recentDepenses: { id: string; libelle: string; montant: number; date_depense: string; categorie: string }[];
+  recentRecettes: RecentRecette[];
+  recentDepenses: RecentDepense[];
   facilities: FacilityStatusItem[];
   upcomingEvents: UpcomingEventItem[];
   loading: boolean;
@@ -146,8 +162,8 @@ export function useDashboardData(): DashboardData {
         recettesJour,
         depensesJour,
         recettesSemaine,
-        recentRecettes: (recentRecRes.data as DashboardData["recentRecettes"]) || [],
-        recentDepenses: (recentDepRes.data as DashboardData["recentDepenses"]) || [],
+        recentRecettes: (recentRecRes.data as RecentRecette[] | null) ?? [],
+        recentDepenses: (recentDepRes.data as RecentDepense[] | null) ?? [],
         facilities,
         upcomingEvents,
       };
