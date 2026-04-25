@@ -147,7 +147,15 @@ function ParametresPage() {
             <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
                 <h3 className="text-sm font-semibold text-card-foreground">Gestion des utilisateurs et rôles</h3>
-                {isAdmin && <InviteUserDialog onCreated={fetchUsers} />}
+                {isAdmin && (
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={handleSeed} disabled={seeding} className="gap-2">
+                      {seeding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                      Créer les 5 comptes par défaut
+                    </Button>
+                    <InviteUserDialog onCreated={fetchUsers} />
+                  </div>
+                )}
               </div>
               {loading ? (
                 <div className="flex items-center justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
