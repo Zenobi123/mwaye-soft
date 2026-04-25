@@ -4,10 +4,10 @@ import { Plus, Filter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CATEGORY_COLORS, formatAmount } from "@/config/app";
-import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { RecetteForm } from "@/components/comptabilite/RecetteForm";
-import { useAuth } from "@/hooks/useAuth";
+import { useRecettesData } from "@/hooks/useRecettesData";
 import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/recettes")({
@@ -20,43 +20,10 @@ export const Route = createFileRoute("/recettes")({
   }),
 });
 
-interface RecetteRow {
-  id: string;
-  libelle: string;
-  montant: number;
-  categorie: string;
-  mode_paiement: string;
-  date_recette: string;
-  reference: string | null;
-  notes: string | null;
-}
-
 function RecettesPage() {
-  const { user, loading: authLoading } = useAuth();
-  const [recettes, setRecettes] = useState<RecetteRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const { recettes, total, isLoading } = useRecettesData();
   const [showForm, setShowForm] = useState(false);
-
-  const fetchRecettes = useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from("recettes")
-      .select("id, libelle, montant, categorie, mode_paiement, date_recette, reference, notes")
-      .order("date_recette", { ascending: false })
-      .limit(100);
-    setRecettes((data as RecetteRow[]) || []);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (user) fetchRecettes();
-  }, [user, fetchRecettes]);
-
-  const total = recettes.reduce((s, r) => s + Number(r.montant), 0);
-
-  if (authLoading) {
-    return <AppLayout><div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div></AppLayout>;
-  }
 
   return (
     <AppLayout>
@@ -80,7 +47,7 @@ function RecettesPage() {
         </div>
 
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
@@ -126,7 +93,11 @@ function RecettesPage() {
       {showForm && (
         <RecetteForm
           onClose={() => setShowForm(false)}
-          onSuccess={() => { setShowForm(false); fetchRecettes(); }}
+          onSuccess={() => {
+            setShowForm(false);
+            queryClient.invalidateQueries({ queryKey: ["recettes"] });
+            queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+          }}
         />
       )}
     </AppLayout>

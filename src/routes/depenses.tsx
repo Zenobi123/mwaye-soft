@@ -4,10 +4,10 @@ import { Plus, Filter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { STATUS_COLORS, formatAmount } from "@/config/app";
-import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { DepenseForm } from "@/components/comptabilite/DepenseForm";
-import { useAuth } from "@/hooks/useAuth";
+import { useDepensesData } from "@/hooks/useDepensesData";
 import { BackButton } from "@/components/layout/BackButton";
 
 export const Route = createFileRoute("/depenses")({
@@ -20,42 +20,10 @@ export const Route = createFileRoute("/depenses")({
   }),
 });
 
-interface DepenseRow {
-  id: string;
-  libelle: string;
-  montant: number;
-  categorie: string;
-  statut: string;
-  mode_paiement: string;
-  date_depense: string;
-}
-
 function DepensesPage() {
-  const { user, loading: authLoading } = useAuth();
-  const [depenses, setDepenses] = useState<DepenseRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const { depenses, total, isLoading } = useDepensesData();
   const [showForm, setShowForm] = useState(false);
-
-  const fetchDepenses = useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from("depenses")
-      .select("id, libelle, montant, categorie, statut, mode_paiement, date_depense")
-      .order("date_depense", { ascending: false })
-      .limit(100);
-    setDepenses((data as DepenseRow[]) || []);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (user) fetchDepenses();
-  }, [user, fetchDepenses]);
-
-  const total = depenses.reduce((s, d) => s + Number(d.montant), 0);
-
-  if (authLoading) {
-    return <AppLayout><div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div></AppLayout>;
-  }
 
   return (
     <AppLayout>
@@ -79,7 +47,7 @@ function DepensesPage() {
         </div>
 
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
@@ -125,7 +93,11 @@ function DepensesPage() {
       {showForm && (
         <DepenseForm
           onClose={() => setShowForm(false)}
-          onSuccess={() => { setShowForm(false); fetchDepenses(); }}
+          onSuccess={() => {
+            setShowForm(false);
+            queryClient.invalidateQueries({ queryKey: ["depenses"] });
+            queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+          }}
         />
       )}
     </AppLayout>
