@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileDown, Check, Sparkles, AlertTriangle } from "lucide-react";
 import { formatAmount } from "@/config/app";
 import { useImmobilier } from "@/hooks/useImmobilier";
+import { useAppSettings } from "@/hooks/useAppSettings";
 import { exportQuittancePDF } from "@/services/quittanceService";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
@@ -29,6 +30,7 @@ interface QuittanceRow {
 
 export function QuittancesTab() {
   const { quittances, totalImpaye, nbImpayes, genererMois, marquerPayee, lancerPenalitesRappels } = useImmobilier();
+  const { settings } = useAppSettings();
   const [paiementId, setPaiementId] = useState<string | null>(null);
   const [mode, setMode] = useState("Espèces");
   const [moisCible, setMoisCible] = useState(new Date().toISOString().slice(0, 7));
@@ -47,6 +49,11 @@ export function QuittancesTab() {
       locataire: q.contrats_bail?.locataire ?? "—",
       appartement_numero: q.appartements?.numero ?? "—",
       appartement_type: q.appartements?.type_appartement ?? "—",
+      societe_nom: settings.complex_name,
+      societe_niu: settings.niu,
+      societe_rccm: settings.rccm,
+      societe_adresse: settings.adresse,
+      societe_telephone: settings.telephone,
     });
   };
 

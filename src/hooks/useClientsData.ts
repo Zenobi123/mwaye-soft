@@ -18,7 +18,14 @@ export function useClientsData() {
   });
 
   const addClient = useMutation({
-    mutationFn: async (values: { nom: string; email?: string; telephone?: string; adresse?: string; type_client?: string }) => {
+    mutationFn: async (values: {
+      nom: string;
+      email?: string;
+      telephone?: string;
+      adresse?: string;
+      type_client?: string;
+      niu?: string;
+    }) => {
       const { error } = await supabase.from("clients").insert({ ...values, user_id: user!.id });
       if (error) throw error;
     },

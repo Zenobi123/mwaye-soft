@@ -15,6 +15,12 @@ export interface QuittancePDFData {
   locataire: string;
   appartement_numero: string;
   appartement_type: string;
+  // Identité société (mentions OHADA)
+  societe_nom?: string;
+  societe_niu?: string | null;
+  societe_rccm?: string | null;
+  societe_adresse?: string | null;
+  societe_telephone?: string | null;
 }
 
 function formatMois(d: string) {
@@ -27,14 +33,21 @@ function formatDate(d: string) {
 export function exportQuittancePDF(q: QuittancePDFData) {
   const doc = new jsPDF();
 
-  // En-tête
-  doc.setFontSize(18);
+  // En-tête société dynamique
+  doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.text("MWAYE HOUSE", 14, 20);
-  doc.setFontSize(9);
+  doc.text(q.societe_nom ?? "MWAYE HOUSE", 14, 20);
+  doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(120);
-  doc.text("Complexe résidentiel et commercial — Cameroun", 14, 26);
+  let yh = 26;
+  if (q.societe_adresse)   { doc.text(q.societe_adresse, 14, yh);   yh += 4; }
+  if (q.societe_telephone) { doc.text(`Tél : ${q.societe_telephone}`, 14, yh); yh += 4; }
+  const idsBail = [
+    q.societe_niu  ? `NIU : ${q.societe_niu}`   : null,
+    q.societe_rccm ? `RCCM : ${q.societe_rccm}` : null,
+  ].filter(Boolean).join(" — ");
+  if (idsBail) { doc.text(idsBail, 14, yh); }
   doc.setTextColor(0);
 
   // Numéro & date
