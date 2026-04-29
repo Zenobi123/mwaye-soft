@@ -26,6 +26,7 @@ import { BackButton } from "@/components/layout/BackButton";
 import { InviteUserDialog } from "@/components/parametres/InviteUserDialog";
 import { SettingsForm } from "@/components/parametres/SettingsForm";
 import { AuditLogTable } from "@/components/parametres/AuditLogTable";
+import { BackupsTab } from "@/components/parametres/BackupsTab";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteUser } from "@/server/deleteUser.functions";
 import { seedDefaultUsers } from "@/server/seedDefaultUsers.functions";
