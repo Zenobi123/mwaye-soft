@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch, Sparkles } from "lucide-react";
+import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch, Sparkles, ShieldCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
