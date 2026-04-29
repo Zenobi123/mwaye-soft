@@ -319,6 +319,12 @@ function ParametresPage() {
               </div>
             </TabsContent>
           )}
+
+          {isAdmin && (
+            <TabsContent value="backups">
+              <BackupsTab />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </AppLayout>
