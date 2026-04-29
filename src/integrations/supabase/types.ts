@@ -256,6 +256,48 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_logs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          date_backup: string
+          file_path: string
+          file_size_bytes: number
+          id: string
+          observations: string | null
+          rows_count: number
+          statut: string
+          tables_count: number
+          type_backup: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          date_backup?: string
+          file_path: string
+          file_size_bytes?: number
+          id?: string
+          observations?: string | null
+          rows_count?: number
+          statut?: string
+          tables_count?: number
+          type_backup?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          date_backup?: string
+          file_path?: string
+          file_size_bytes?: number
+          id?: string
+          observations?: string | null
+          rows_count?: number
+          statut?: string
+          tables_count?: number
+          type_backup?: string
+        }
+        Relationships: []
+      }
       bilans_mensuels: {
         Row: {
           benefice: number
@@ -1752,6 +1794,10 @@ export type Database = {
         Returns: string
       }
       marquer_factures_en_retard: { Args: never; Returns: number }
+      purger_anciens_backups: {
+        Args: { p_jours_retention?: number }
+        Returns: number
+      }
       valider_bulletin_et_creer_depense: {
         Args: { p_bulletin_id: string }
         Returns: string
