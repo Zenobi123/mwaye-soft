@@ -72,6 +72,7 @@ export type Database = {
       }
       app_settings: {
         Row: {
+          adresse: string | null
           cnps_employee_rate: number
           cnps_employer_rate: number
           complex_name: string
@@ -80,14 +81,26 @@ export type Database = {
           default_event_hall_price: number
           default_hammam_price: number
           default_sport_price: number
+          email_societe: string | null
           id: string
           late_fee_rate: number
           locale: string
+          niu: string | null
           notification_email: string | null
+          plafond_cnps: number
+          rccm: string | null
+          regime_fiscal: string
+          secteur_at: string
+          taux_at: number
+          taux_cfc_emp: number
+          taux_cfc_pat: number
+          taux_fne: number
+          telephone: string | null
           tva_rate: number
           updated_at: string
         }
         Insert: {
+          adresse?: string | null
           cnps_employee_rate?: number
           cnps_employer_rate?: number
           complex_name?: string
@@ -96,14 +109,26 @@ export type Database = {
           default_event_hall_price?: number
           default_hammam_price?: number
           default_sport_price?: number
+          email_societe?: string | null
           id?: string
           late_fee_rate?: number
           locale?: string
+          niu?: string | null
           notification_email?: string | null
+          plafond_cnps?: number
+          rccm?: string | null
+          regime_fiscal?: string
+          secteur_at?: string
+          taux_at?: number
+          taux_cfc_emp?: number
+          taux_cfc_pat?: number
+          taux_fne?: number
+          telephone?: string | null
           tva_rate?: number
           updated_at?: string
         }
         Update: {
+          adresse?: string | null
           cnps_employee_rate?: number
           cnps_employer_rate?: number
           complex_name?: string
@@ -112,10 +137,21 @@ export type Database = {
           default_event_hall_price?: number
           default_hammam_price?: number
           default_sport_price?: number
+          email_societe?: string | null
           id?: string
           late_fee_rate?: number
           locale?: string
+          niu?: string | null
           notification_email?: string | null
+          plafond_cnps?: number
+          rccm?: string | null
+          regime_fiscal?: string
+          secteur_at?: string
+          taux_at?: number
+          taux_cfc_emp?: number
+          taux_cfc_pat?: number
+          taux_fne?: number
+          telephone?: string | null
           tva_rate?: number
           updated_at?: string
         }
@@ -256,6 +292,48 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_logs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          date_backup: string
+          file_path: string
+          file_size_bytes: number
+          id: string
+          observations: string | null
+          rows_count: number
+          statut: string
+          tables_count: number
+          type_backup: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          date_backup?: string
+          file_path: string
+          file_size_bytes?: number
+          id?: string
+          observations?: string | null
+          rows_count?: number
+          statut?: string
+          tables_count?: number
+          type_backup?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          date_backup?: string
+          file_path?: string
+          file_size_bytes?: number
+          id?: string
+          observations?: string | null
+          rows_count?: number
+          statut?: string
+          tables_count?: number
+          type_backup?: string
+        }
+        Relationships: []
+      }
       bilans_mensuels: {
         Row: {
           benefice: number
@@ -309,7 +387,10 @@ export type Database = {
       }
       bulletins_paie: {
         Row: {
+          accidents_travail: number
           autres_retenues: number
+          cfc_employe: number
+          cfc_employeur: number
           cnps_employe: number
           cnps_employeur: number
           cout_total_employeur: number
@@ -317,22 +398,30 @@ export type Database = {
           date_paiement: string | null
           depense_id: string | null
           employe_id: string
+          fne_employeur: number
+          heures_normales: number
           heures_sup: number
           id: string
           irpp: number
+          jours_travailles: number | null
           mode_paiement: string | null
           mois: string
           notes: string | null
           numero: string
           prime: number
+          rav: number
           salaire_brut: number
           salaire_net: number
           statut: string
+          tdl: number
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          accidents_travail?: number
           autres_retenues?: number
+          cfc_employe?: number
+          cfc_employeur?: number
           cnps_employe?: number
           cnps_employeur?: number
           cout_total_employeur?: number
@@ -340,22 +429,30 @@ export type Database = {
           date_paiement?: string | null
           depense_id?: string | null
           employe_id: string
+          fne_employeur?: number
+          heures_normales?: number
           heures_sup?: number
           id?: string
           irpp?: number
+          jours_travailles?: number | null
           mode_paiement?: string | null
           mois: string
           notes?: string | null
           numero: string
           prime?: number
+          rav?: number
           salaire_brut?: number
           salaire_net?: number
           statut?: string
+          tdl?: number
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          accidents_travail?: number
           autres_retenues?: number
+          cfc_employe?: number
+          cfc_employeur?: number
           cnps_employe?: number
           cnps_employeur?: number
           cout_total_employeur?: number
@@ -363,17 +460,22 @@ export type Database = {
           date_paiement?: string | null
           depense_id?: string | null
           employe_id?: string
+          fne_employeur?: number
+          heures_normales?: number
           heures_sup?: number
           id?: string
           irpp?: number
+          jours_travailles?: number | null
           mode_paiement?: string | null
           mois?: string
           notes?: string | null
           numero?: string
           prime?: number
+          rav?: number
           salaire_brut?: number
           salaire_net?: number
           statut?: string
+          tdl?: number
           updated_at?: string
           user_id?: string | null
         }
@@ -393,6 +495,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
+          niu: string | null
           nom: string
           notes: string | null
           telephone: string | null
@@ -405,6 +508,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          niu?: string | null
           nom: string
           notes?: string | null
           telephone?: string | null
@@ -417,6 +521,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          niu?: string | null
           nom?: string
           notes?: string | null
           telephone?: string | null
@@ -643,6 +748,8 @@ export type Database = {
           departement: string
           email: string | null
           id: string
+          matricule_cnps: string | null
+          niu_employe: string | null
           nom: string
           notes: string | null
           poste: string
@@ -658,6 +765,8 @@ export type Database = {
           departement?: string
           email?: string | null
           id?: string
+          matricule_cnps?: string | null
+          niu_employe?: string | null
           nom: string
           notes?: string | null
           poste: string
@@ -673,6 +782,8 @@ export type Database = {
           departement?: string
           email?: string | null
           id?: string
+          matricule_cnps?: string | null
+          niu_employe?: string | null
           nom?: string
           notes?: string | null
           poste?: string
@@ -1752,6 +1863,10 @@ export type Database = {
         Returns: string
       }
       marquer_factures_en_retard: { Args: never; Returns: number }
+      purger_anciens_backups: {
+        Args: { p_jours_retention?: number }
+        Returns: number
+      }
       valider_bulletin_et_creer_depense: {
         Args: { p_bulletin_id: string }
         Returns: string

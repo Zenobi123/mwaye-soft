@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch, Sparkles } from "lucide-react";
+import { Shield, Users, Building, Plus, X, Loader2, Trash2, FileSearch, Sparkles, ShieldCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,7 @@ import { BackButton } from "@/components/layout/BackButton";
 import { InviteUserDialog } from "@/components/parametres/InviteUserDialog";
 import { SettingsForm } from "@/components/parametres/SettingsForm";
 import { AuditLogTable } from "@/components/parametres/AuditLogTable";
+import { BackupsTab } from "@/components/parametres/BackupsTab";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteUser } from "@/server/deleteUser.functions";
 import { seedDefaultUsers } from "@/server/seedDefaultUsers.functions";
@@ -139,6 +140,9 @@ function ParametresPage() {
             <TabsTrigger value="config" className="gap-2"><Building className="h-4 w-4" />Configuration</TabsTrigger>
             {isAdmin && (
               <TabsTrigger value="audit" className="gap-2"><FileSearch className="h-4 w-4" />Audit</TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="backups" className="gap-2"><ShieldCheck className="h-4 w-4" />Sauvegardes</TabsTrigger>
             )}
           </TabsList>
 
@@ -313,6 +317,12 @@ function ParametresPage() {
                 </div>
                 <AuditLogTable />
               </div>
+            </TabsContent>
+          )}
+
+          {isAdmin && (
+            <TabsContent value="backups">
+              <BackupsTab />
             </TabsContent>
           )}
         </Tabs>
