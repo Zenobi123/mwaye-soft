@@ -31,6 +31,7 @@ import { Route as HooksPenalitesRappelsRouteImport } from './routes/hooks/penali
 import { Route as HooksClotureJournalRouteImport } from './routes/hooks/cloture-journal'
 import { Route as HooksBulletinsMensuelsRouteImport } from './routes/hooks/bulletins-mensuels'
 import { Route as HooksBilanMensuelRouteImport } from './routes/hooks/bilan-mensuel'
+import { Route as ApiPublicHooksMonthlyBackupRouteImport } from './routes/api/public/hooks/monthly-backup'
 
 const StocksRoute = StocksRouteImport.update({
   id: '/stocks',
@@ -143,6 +144,12 @@ const HooksBilanMensuelRoute = HooksBilanMensuelRouteImport.update({
   path: '/hooks/bilan-mensuel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksMonthlyBackupRoute =
+  ApiPublicHooksMonthlyBackupRouteImport.update({
+    id: '/api/public/hooks/monthly-backup',
+    path: '/api/public/hooks/monthly-backup',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -167,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/hooks/cloture-journal': typeof HooksClotureJournalRoute
   '/hooks/penalites-rappels': typeof HooksPenalitesRappelsRoute
   '/hooks/quittances-mensuelles': typeof HooksQuittancesMensuellesRoute
+  '/api/public/hooks/monthly-backup': typeof ApiPublicHooksMonthlyBackupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -191,6 +199,7 @@ export interface FileRoutesByTo {
   '/hooks/cloture-journal': typeof HooksClotureJournalRoute
   '/hooks/penalites-rappels': typeof HooksPenalitesRappelsRoute
   '/hooks/quittances-mensuelles': typeof HooksQuittancesMensuellesRoute
+  '/api/public/hooks/monthly-backup': typeof ApiPublicHooksMonthlyBackupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -216,6 +225,7 @@ export interface FileRoutesById {
   '/hooks/cloture-journal': typeof HooksClotureJournalRoute
   '/hooks/penalites-rappels': typeof HooksPenalitesRappelsRoute
   '/hooks/quittances-mensuelles': typeof HooksQuittancesMensuellesRoute
+  '/api/public/hooks/monthly-backup': typeof ApiPublicHooksMonthlyBackupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/hooks/cloture-journal'
     | '/hooks/penalites-rappels'
     | '/hooks/quittances-mensuelles'
+    | '/api/public/hooks/monthly-backup'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/hooks/cloture-journal'
     | '/hooks/penalites-rappels'
     | '/hooks/quittances-mensuelles'
+    | '/api/public/hooks/monthly-backup'
   id:
     | '__root__'
     | '/'
@@ -290,6 +302,7 @@ export interface FileRouteTypes {
     | '/hooks/cloture-journal'
     | '/hooks/penalites-rappels'
     | '/hooks/quittances-mensuelles'
+    | '/api/public/hooks/monthly-backup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -315,6 +328,7 @@ export interface RootRouteChildren {
   HooksClotureJournalRoute: typeof HooksClotureJournalRoute
   HooksPenalitesRappelsRoute: typeof HooksPenalitesRappelsRoute
   HooksQuittancesMensuellesRoute: typeof HooksQuittancesMensuellesRoute
+  ApiPublicHooksMonthlyBackupRoute: typeof ApiPublicHooksMonthlyBackupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -473,6 +487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HooksBilanMensuelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/monthly-backup': {
+      id: '/api/public/hooks/monthly-backup'
+      path: '/api/public/hooks/monthly-backup'
+      fullPath: '/api/public/hooks/monthly-backup'
+      preLoaderRoute: typeof ApiPublicHooksMonthlyBackupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -499,6 +520,7 @@ const rootRouteChildren: RootRouteChildren = {
   HooksClotureJournalRoute: HooksClotureJournalRoute,
   HooksPenalitesRappelsRoute: HooksPenalitesRappelsRoute,
   HooksQuittancesMensuellesRoute: HooksQuittancesMensuellesRoute,
+  ApiPublicHooksMonthlyBackupRoute: ApiPublicHooksMonthlyBackupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
