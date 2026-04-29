@@ -141,6 +141,9 @@ function ParametresPage() {
             {isAdmin && (
               <TabsTrigger value="audit" className="gap-2"><FileSearch className="h-4 w-4" />Audit</TabsTrigger>
             )}
+            {isAdmin && (
+              <TabsTrigger value="backups" className="gap-2"><ShieldCheck className="h-4 w-4" />Sauvegardes</TabsTrigger>
+            )}
           </TabsList>
 
           {/* ── Utilisateurs + Attribution des rôles ── */}
